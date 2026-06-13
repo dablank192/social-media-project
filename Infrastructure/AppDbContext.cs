@@ -1,0 +1,20 @@
+using System;
+using Microsoft.EntityFrameworkCore;
+using vsa_w_controller_csharp.Model;
+
+namespace vsa_w_controller_csharp.Infrastructure;
+
+public class AppDbContext : DbContext
+{
+    public AppDbContext (DbContextOptions<AppDbContext> option) : base(option) {}
+
+    public DbSet<User> User {get; set;}
+    public DbSet<Blog> Blog {get; set;}
+
+    public void Configure(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+    }
+}
