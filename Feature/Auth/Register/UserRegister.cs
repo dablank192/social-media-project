@@ -18,16 +18,15 @@ public record Result(
 );
 
 public class UserRegister(
-    AppDbContext dbContext,
     ISender sender
 ) : AuthApi
 {
-    [HttpPost("/register")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [HttpPost("register")]
+    [ProducesResponseType<Result>(StatusCodes.Status201Created)]
     public async Task<IActionResult> Handle ([FromBody] Command req)
     {
-        await sender.Send(req);
-        return Created();
+        var result = await sender.Send(req);
+        return Ok(result);
     }
 
 }
@@ -52,7 +51,7 @@ public class Handler(
 
         var newUser = new User
         {
-            UserName= validUsername!.UserName,
+            UserName= req.Username,
             Password= hashedPassword
         };
 
@@ -62,7 +61,5 @@ public class Handler(
         var response = new Result(newUser.Id);
 
         return response;
-
-        //chua test
     }
 }

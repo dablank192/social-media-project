@@ -10,6 +10,6 @@ public class User
     public DateTime CreatedAt {get; set;} = DateTime.UtcNow;
     public DateTime LastUpdate {get; set;} = DateTime.UtcNow;
 
-
     public List<Blog> Blog {get; set;}
+    public List<RefreshToken> RefreshToken {get; set;}
 }

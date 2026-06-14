@@ -1,6 +1,32 @@
 @vsa_w_controller_csharp_HostAddress = http://localhost:5169
+@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODE0NDI0MDJ9.tCDH1TXr1MrSl4ihYpj9nEj3m5HquzZvFB1hjWVXUCA
+@refresh_token = x-refresh-token=rqcuODdxIqS%2BQ264AZHW%2Fx3mCAF5aI50qdHM14S6ZbfQvR5e1hIoQwrhh6KAhsF8FeQnzVAygLE%2F12IuBkfbGg%3D%3D
 
 GET {{vsa_w_controller_csharp_HostAddress}}/weatherforecast/
 Accept: application/json
 
-###
+
+### User Register
+
+POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username": "example123",
+    "password": "example123"
+}
+
+### User Login
+POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/auth/login
+Content-Type: application/json
+
+{
+    "username": "example123",
+    "password": "example123"
+}
+
+### User Refresh Token
+POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/auth/refresh
+Content-Type: application/json
+Cookie: {{refresh_token}}
