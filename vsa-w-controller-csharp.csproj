@@ -29,6 +29,7 @@
     <Folder Include="Feature\Auth\Refresh\" />
     <Folder Include="Feature\Auth\Register\" />
     <Folder Include="Feature\Blog\" />
+    <Folder Include="Feature\Blog\CreateBlog\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Infrastructure\DbConfig\" />
     <Folder Include="Model\" />

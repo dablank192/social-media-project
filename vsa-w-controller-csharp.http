@@ -1,5 +1,5 @@
 @vsa_w_controller_csharp_HostAddress = http://localhost:5169
-@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODE0NDI0MDJ9.tCDH1TXr1MrSl4ihYpj9nEj3m5HquzZvFB1hjWVXUCA
+@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODE1NDg5OTV9.xRiuEQtvzpisSwk_zIR3LVu8cr-MTHefmJpA5GJEfzo
 @refresh_token = x-refresh-token=rqcuODdxIqS%2BQ264AZHW%2Fx3mCAF5aI50qdHM14S6ZbfQvR5e1hIoQwrhh6KAhsF8FeQnzVAygLE%2F12IuBkfbGg%3D%3D
 
 GET {{vsa_w_controller_csharp_HostAddress}}/weatherforecast/
@@ -30,3 +30,17 @@ Content-Type: application/json
 POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/auth/refresh
 Content-Type: application/json
 Cookie: {{refresh_token}}
+
+
+### User create blog
+
+POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/new-blog
+Content-Type: application/json
+Cookie: {{access_token}}
+Accept: application/json
+
+{
+    "Title": "Example1",
+    "Description": "Testing",
+    "Content": "Testing"
+}
