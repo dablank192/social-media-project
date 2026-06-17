@@ -57,3 +57,16 @@ Cookie: {{access_token}}
 GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/read/019ecc2d-9963-741c-a6c7-410e1151479f
 Accept: application/json
 Cookie: {{access_token}}
+
+
+### Update a blog
+PATCH {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/edit/019ecc2d-9963-741c-a6c7-410e1151479f
+Accept: application/json
+Cookie: {{access_token}}
+Content-Type: application/json
+
+{
+    "title":"tt3",
+    "description":"tt3",
+    "content":"tt3"
+}
