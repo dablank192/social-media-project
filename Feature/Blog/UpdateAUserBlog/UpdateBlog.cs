@@ -26,7 +26,6 @@ public class UpdateBlog (
 
 {
     [HttpPatch("edit/{BlogId}")]
-    [Authorize]
     public async Task<IActionResult> Handler([FromRoute]Guid blogId ,[FromBody] UpdateBlogDto req)
     {
         var validUser = User.FindFirst("userid")!.Value;
