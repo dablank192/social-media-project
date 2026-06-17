@@ -1,5 +1,5 @@
 @vsa_w_controller_csharp_HostAddress = http://localhost:5169
-@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODE1NTEyNjJ9.mdpkqOJhHI1m4UB7rcv3wrJxUdIOS0X3CHpWVJNXEGs
+@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODE3MjUxMDd9.UI1CYVX54-3pnDB7w_UgxAWAbYsQ0jF6pRgh7w5g9LI
 @refresh_token = x-refresh-token=rqcuODdxIqS%2BQ264AZHW%2Fx3mCAF5aI50qdHM14S6ZbfQvR5e1hIoQwrhh6KAhsF8FeQnzVAygLE%2F12IuBkfbGg%3D%3D
 
 GET {{vsa_w_controller_csharp_HostAddress}}/weatherforecast/
@@ -48,5 +48,12 @@ Accept: application/json
 
 ### Get all blog from current user
 GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/all-blog?PageSize=1000&PageIndex=1
+Accept: application/json
+Cookie: {{access_token}}
+
+
+### Get single blog from user/or current user
+
+GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/read/019ecc2d-9963-741c-a6c7-410e1151479f
 Accept: application/json
 Cookie: {{access_token}}

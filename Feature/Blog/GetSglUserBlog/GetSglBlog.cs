@@ -1,0 +1,57 @@
+using System;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using vsa_w_controller_csharp.Feature.Blog.GetAllUserBlog;
+using vsa_w_controller_csharp.Infrastructure;
+
+namespace vsa_w_controller_csharp.Feature.Blog.GetSglUserBlog;
+
+public record Query(
+    Guid BlogId
+) : IRequest<Result>;
+
+public record Result(
+    BlogDto? Response
+);
+
+public class GetSglBlog(
+    ISender sender
+) : BlogApi
+
+{
+    [HttpGet("read/{BlogId}")]
+    public async Task<IActionResult> HandleAsync([FromRoute] Query qry)
+    {
+        var result = await sender.Send(qry);
+
+        return Ok(result);
+    }
+}
+
+
+public class Handler(
+    AppDbContext dbContext
+) : IRequestHandler<Query, Result>
+{
+    public async Task<Result> Handle(Query qry, CancellationToken ct)
+    {
+        var blog = await dbContext.Blog
+        .Where(t => t.Id == qry.BlogId)
+        .Select(t => new BlogDto(
+            BlogId: t.Id,
+            UserId: t.UserId,
+            Title: t.Title,
+            Description: t.Description,
+            Content: t.Content,
+            CreatedAt: t.CreatedAt
+        ))
+        .FirstOrDefaultAsync(ct);
+
+        var response = new Result(
+            Response: blog
+        );
+
+        return response;
+    }
+}
