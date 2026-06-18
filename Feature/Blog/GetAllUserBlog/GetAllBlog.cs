@@ -50,7 +50,7 @@ public class Handler(
         var totalRecord = await dbContext.Blog.CountAsync(ct);
 
         var allBlog = await dbContext.Blog
-        .Where(t => t.UserId == qry.UserId)
+        .Where(t => t.UserId == qry.UserId) //Need to add condition: status=inactive, but leave at this for for development purpose
         .AsNoTracking()
         .OrderBy(t => t.CreatedAt)
         .Skip(index)
@@ -61,6 +61,7 @@ public class Handler(
             Title: t.Title,
             Description: t.Description,
             Content: t.Content,
+            Status: t.Status,
             CreatedAt: t.CreatedAt
         ))
         .ToListAsync(ct);

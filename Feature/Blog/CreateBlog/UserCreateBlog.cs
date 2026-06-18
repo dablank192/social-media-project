@@ -52,7 +52,8 @@ public class Handler(
             UserId = req.UserId,
             Title = req.Title,
             Description = req.Description,
-            Content = req.Content
+            Content = req.Content,
+            Status = "A"
         };
 
         dbContext.Blog.Add(newBlog);

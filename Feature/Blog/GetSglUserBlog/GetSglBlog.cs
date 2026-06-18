@@ -44,6 +44,7 @@ public class Handler(
             Title: t.Title,
             Description: t.Description,
             Content: t.Content,
+            Status: t.Status,
             CreatedAt: t.CreatedAt
         ))
         .FirstOrDefaultAsync(ct);

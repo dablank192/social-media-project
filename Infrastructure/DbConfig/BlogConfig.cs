@@ -22,5 +22,15 @@ public class BlogConfig : IEntityTypeConfiguration<Blog>
 
         builder.Property(t => t.Description)
         .IsRequired();
+
+        builder.Property(t => t.Status)
+        .IsRequired()
+        .HasMaxLength(1)
+        .HasDefaultValue("A");
+
+        builder.HasOne(t => t.User)
+        .WithMany(t => t.Blog)
+        .HasForeignKey(t => t.UserId)
+        .OnDelete(DeleteBehavior.Restrict);
     }
 }

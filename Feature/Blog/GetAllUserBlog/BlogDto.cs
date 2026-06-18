@@ -8,5 +8,6 @@ public record BlogDto(
     string? Title,
     string? Description,
     string? Content,
+    string Status,
     DateTime? CreatedAt
 );

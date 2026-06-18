@@ -29,6 +29,7 @@
     <Folder Include="Feature\Auth\Refresh\" />
     <Folder Include="Feature\Auth\Register\" />
     <Folder Include="Feature\Blog\CreateBlog\" />
+    <Folder Include="Feature\Blog\DeleteABlog\" />
     <Folder Include="Feature\Blog\GetAllUserBlog\" />
     <Folder Include="Feature\Blog\GetSglUserBlog\" />
     <Folder Include="Feature\Blog\UpdateAUserBlog\" />

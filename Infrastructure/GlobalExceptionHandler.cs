@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using vsa_w_controller_csharp.Exception.AuthException;
+using vsa_w_controller_csharp.Exception.BlogException;
+using vsa_w_controller_csharp.Feature.Blog.UpdateAUserBlog;
 
 namespace vsa_w_controller_csharp.Infrastructure;
 
@@ -46,6 +48,20 @@ public class GlobalExceptionHandler(
             context.Response.StatusCode = StatusCodes.Status200OK;
             problemDetail.Detail = "Can't identify refresh token";
             problemDetail.Status = StatusCodes.Status401Unauthorized;
+        }
+
+        else if (exception is DeleteBlogNotFoundException)
+        {
+            context.Response.StatusCode = StatusCodes.Status200OK;
+            problemDetail.Detail = "Can't find blog's id for termination";
+            problemDetail.Status = StatusCodes.Status404NotFound;
+        }
+
+        else if (exception is UpdateBlogNotFoundException)
+        {
+            context.Response.StatusCode = StatusCodes.Status200OK;
+            problemDetail.Detail = "Can't find blog's id for update";
+            problemDetail.Status = StatusCodes.Status404NotFound;
         }
 
         if (env.IsDevelopment())
