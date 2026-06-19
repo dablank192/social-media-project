@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using vsa_w_controller_csharp.Feature.Auth;
@@ -74,7 +75,31 @@ builder.Services.AddAuthentication(option =>
 builder.Services.AddControllers();
 
 
+/// Add Blazor CORS Config
+
+var blazorOrigin = "http://localhost:5256";
+
+builder.Services.AddCors(option =>
+{
+    option.AddPolicy("AllowBlazor", policy =>
+    {
+        policy.WithOrigins(blazorOrigin)
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+    });
+});
+
+
 var app = builder.Build();
+
+
+app.UseRouting();
+
+app.UseCors("AllowBlazor");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
