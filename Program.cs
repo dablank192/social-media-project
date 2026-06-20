@@ -107,6 +107,13 @@ app.MapControllers();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        // Lệnh này tương đương với dotnet ef database update
+        dbContext.Database.Migrate(); 
+    }
 }
 
 app.UseHttpsRedirection();

@@ -1,4 +1,5 @@
 @vsa_w_controller_csharp_HostAddress = http://localhost:5169
+@docker_host = http://localhost:8080
 @access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODE4MTY1Mjd9.vp_i_yUYkp7ykdmEMTC4QN99K7vv86t-TI1tKgSjkQo
 @refresh_token = x-refresh-token=rqcuODdxIqS%2BQ264AZHW%2Fx3mCAF5aI50qdHM14S6ZbfQvR5e1hIoQwrhh6KAhsF8FeQnzVAygLE%2F12IuBkfbGg%3D%3D
 
@@ -8,7 +9,7 @@ Accept: application/json
 
 ### User Register
 
-POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/auth/register
+POST {{docker_host}}/api/v1/vsac/auth/register
 Content-Type: application/json
 Accept: application/json
 
