@@ -26,6 +26,7 @@ public class DeleteBlog(
 ) : BlogApi
 {
     [HttpDelete("deactive-blog")]
+    [ProducesResponseType<Result>(StatusCodes.Status200OK)]
     public async Task<IActionResult> HandleAsync([FromQuery] DeleteBlogDto req)
     {
         var user = User.FindFirst("userid")?.Value;

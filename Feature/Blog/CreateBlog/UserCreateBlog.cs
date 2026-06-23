@@ -23,6 +23,7 @@ public class UserCreateBlog(
 
 {
     [HttpPost("new-blog")]
+    [ProducesResponseType<Result>(StatusCodes.Status200OK)]
     public async Task<IActionResult> HandleAsync([FromBody]CreateBlogDto req)
     {
         var currentUser = User.FindFirst("userid")?.Value;

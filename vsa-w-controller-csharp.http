@@ -1,6 +1,6 @@
 @vsa_w_controller_csharp_HostAddress = http://localhost:5169
 @docker_host = http://localhost:8080
-@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODE4MTY1Mjd9.vp_i_yUYkp7ykdmEMTC4QN99K7vv86t-TI1tKgSjkQo
+@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODIyNDMxOTl9.pZyADhlIgEVw1PvlWxdb3leX25nIkVwpcSSyCjTGVSU
 @refresh_token = x-refresh-token=rqcuODdxIqS%2BQ264AZHW%2Fx3mCAF5aI50qdHM14S6ZbfQvR5e1hIoQwrhh6KAhsF8FeQnzVAygLE%2F12IuBkfbGg%3D%3D
 
 GET {{vsa_w_controller_csharp_HostAddress}}/weatherforecast/
@@ -56,6 +56,12 @@ Cookie: {{access_token}}
 ### Get single blog from user/or current user
 
 GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/read/019edc1e-ae60-700a-918e-c72e9ff189e0
+Accept: application/json
+Cookie: {{access_token}}
+
+
+### Get newest blog for new feed
+GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/feed?PageIndex=1&PageSize=1000&FromDate=07/01/2026&ToDate=07/30/2026
 Accept: application/json
 Cookie: {{access_token}}
 

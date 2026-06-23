@@ -21,6 +21,7 @@ public class GetSglBlog(
 
 {
     [HttpGet("read/{BlogId}")]
+    [ProducesResponseType<Result>(StatusCodes.Status200OK)]
     public async Task<IActionResult> HandleAsync([FromRoute] Query qry)
     {
         var result = await sender.Send(qry);

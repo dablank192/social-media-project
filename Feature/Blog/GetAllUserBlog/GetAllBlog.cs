@@ -24,6 +24,7 @@ public class GetAllBlog(
 
 {
     [HttpGet("all-blog")]
+    [ProducesResponseType<Result>(StatusCodes.Status200OK)]
     public async Task<IActionResult> HandleAsync([FromQuery] GetAllBlogDto qry)
     {
         var currentUser = User.FindFirst("userid")?.Value;
