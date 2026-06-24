@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
 
     public DbSet<User> User {get; set;}
     public DbSet<Blog> Blog {get; set;}
+    public DbSet<BlogImages> BlogImages {get; set;}
     public DbSet<RefreshToken> RefreshToken {get; set;}
 
     public void Configure(ModelBuilder modelBuilder)

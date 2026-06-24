@@ -28,7 +28,6 @@ public class UploadImage(
 }
 
 public class Handler(
-    AppDbContext dbContext,
     IAmazonS3 s3Client
 ) : IRequestHandler<Command, Result>
 
@@ -55,6 +54,6 @@ public class Handler(
             StorageKey: storageKey
         );
 
-        //chua test
+        //chua test, va chua co buoc add ban ghi tam thoi vao database
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using vsa_w_controller_csharp.Infrastructure.DbConfig;
 
 namespace vsa_w_controller_csharp.Model;
 
@@ -20,4 +21,5 @@ public class Blog
     public DateTime LastUpdate {get; set;} = DateTime.UtcNow;
 
     public User User {get; set;}
+    public List<BlogImages> BlogImages {get; set;}
 }
