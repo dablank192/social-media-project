@@ -1,4 +1,5 @@
 using System.Text;
+using Amazon.S3;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.EntityFrameworkCore;
@@ -89,6 +90,29 @@ builder.Services.AddCors(option =>
         .AllowCredentials();
     });
 });
+
+
+// Supabase S3 Storage config 
+
+var accessKey = builder.Configuration["S3Storage:AccessKey"];
+var accessSecretKey = builder.Configuration["S3Storage:SecretAccessKey"];
+var s3Endpoint = builder.Configuration["S3Storage:Endpoint"];
+
+var s3config = new AmazonS3Config
+{
+    ServiceURL = s3Endpoint,
+    ForcePathStyle = true
+};
+
+var s3Client = new AmazonS3Client(
+    accessKey,
+    accessSecretKey,
+    s3config
+);
+
+// Add S3 Client to DI Container
+builder.Services.AddSingleton<IAmazonS3>(s3Client);
+
 
 
 var app = builder.Build();

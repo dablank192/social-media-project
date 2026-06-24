@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="4.0.25.3" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="14.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.8" />
@@ -18,6 +19,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
+    <PackageReference Include="supabase-csharp" Version="0.16.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +36,7 @@
     <Folder Include="Feature\Blog\GetLatestBlog\" />
     <Folder Include="Feature\Blog\GetSglUserBlog\" />
     <Folder Include="Feature\Blog\UpdateAUserBlog\" />
+    <Folder Include="Feature\Image\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Infrastructure\DbConfig\" />
     <Folder Include="Model\" />
