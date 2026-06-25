@@ -3,17 +3,15 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
-using vsa_w_controller_csharp.Infrastructure;
-using vsa_w_controller_csharp.Model;
+
 
 namespace vsa_w_controller_csharp.Feature.Image.UploadImage;
 
-public record ImageList(string StorageUrl, string StorageKey);
+public record ImageDetail(string StorageUrl, string StorageKey);
 
 public record Command(List<string> FileFormat) : IRequest<Result>;
 public record Result(
-    List<ImageList> ImageList);
+    List<ImageDetail> ImageDetail);
 
 public class UploadImage(
     ISender sender
@@ -36,7 +34,7 @@ public class Handler(
 {
     public async Task<Result> Handle (Command req, CancellationToken ct)
     {
-        var imageList = new List<ImageList>();
+        var ImageDetail = new List<ImageDetail>();
         
         var customFolderPath = $"path/{DateTime.Now:yyyy/MM}";
 
@@ -56,10 +54,10 @@ public class Handler(
 
             string signedUploadUrl = s3Client.GetPreSignedURL(preSignedUrlRequest);
 
-            imageList.Add(new ImageList(StorageUrl: signedUploadUrl, StorageKey: storageKey));
+            ImageDetail.Add(new ImageDetail(StorageUrl: signedUploadUrl, StorageKey: storageKey));
         }
 
-        return new Result(imageList);
+        return new Result(ImageDetail);
 
         //chưa test
     }
