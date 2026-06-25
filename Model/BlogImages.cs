@@ -11,10 +11,9 @@ public static class ImageStatus
 public class BlogImages
 {
     public Guid Id {get; set;}
-    public Guid? PostId {get; set;}
+    public Guid? BlogId {get; set;}
     public string? StorageKey {get; set;}
     public int? DisplayOrder {get; set;}
-    public string? Status {get; set;} = ImageStatus.Pending;
 
     public Blog Blog {get; set;}
 }

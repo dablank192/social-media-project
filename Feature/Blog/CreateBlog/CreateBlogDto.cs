@@ -6,5 +6,6 @@ public record CreateBlogDto
 (
     string Title,
     string? Description,
-    string Content
+    string Content,
+    List<string>? StorageKey
 );

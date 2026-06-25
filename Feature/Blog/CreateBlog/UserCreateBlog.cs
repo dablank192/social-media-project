@@ -2,6 +2,7 @@ using System;
 using System.Data.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using vsa_w_controller_csharp.Exception.ImageException;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
 
@@ -11,7 +12,8 @@ public record Command(
     Guid UserId,
     string Title,
     string? Description,
-    string Content
+    string Content,
+    List<string>? StorageKey
 ) : IRequest<Result>;
 public record Result(
     Guid BlogId
@@ -33,7 +35,8 @@ public class UserCreateBlog(
             UserId: currentUserId,
             Title: req.Title,
             Description: req.Description,
-            Content: req.Content
+            Content: req.Content,
+            StorageKey: req.StorageKey
         ));
 
         return Ok(result);
@@ -48,18 +51,47 @@ public class Handler(
 {
     public async Task<Result> Handle(Command req, CancellationToken ct)
     {
-        var newBlog = new Model.Blog
+        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
+
+        try
+
         {
-            UserId = req.UserId,
-            Title = req.Title,
-            Description = req.Description,
-            Content = req.Content,
-            Status = "A"
-        };
+            var newBlog = new Model.Blog
+            {
+                UserId = req.UserId,
+                Title = req.Title,
+                Description = req.Description,
+                Content = req.Content,
+                Status = "A"
+            };
 
-        dbContext.Blog.Add(newBlog);
-        await dbContext.SaveChangesAsync(ct);
+            dbContext.Blog.Add(newBlog);
+            await dbContext.SaveChangesAsync(ct);
 
-        return new Result(BlogId: newBlog.Id);
+            for(int i = 0; i < req.StorageKey.Count(); i++)
+            {
+                var newImage = new BlogImages
+                {
+                    BlogId = newBlog.Id,
+                    StorageKey = req.StorageKey[i],
+                    DisplayOrder = i + 1
+                };
+
+                dbContext.BlogImages.Add(newImage);
+            }
+
+            await dbContext.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+            
+            return new Result(BlogId: newBlog.Id);
+        }
+
+        catch (System.Exception)
+        {
+            await transaction.RollbackAsync(ct);
+            throw new UploadImageException();
+        }
     }
+
+    // ap dung logic moi => chua test
 }
