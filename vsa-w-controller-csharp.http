@@ -1,6 +1,6 @@
 @vsa_w_controller_csharp_HostAddress = http://localhost:5169
 @docker_host = http://localhost:8080
-@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODIyNDMxOTl9.pZyADhlIgEVw1PvlWxdb3leX25nIkVwpcSSyCjTGVSU
+@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODI1MTE0NjJ9.iZJu5HOOBzb0djjjM9IIZNQsZFIBHztE8OBwRwe-Bq8
 @refresh_token = x-refresh-token=rqcuODdxIqS%2BQ264AZHW%2Fx3mCAF5aI50qdHM14S6ZbfQvR5e1hIoQwrhh6KAhsF8FeQnzVAygLE%2F12IuBkfbGg%3D%3D
 
 GET {{vsa_w_controller_csharp_HostAddress}}/weatherforecast/
@@ -41,9 +41,12 @@ Cookie: {{access_token}}
 Accept: application/json
 
 {
-    "Title": "Example1",
-    "Description": "Testing",
-    "Content": "Testing"
+    "Title": "Example2",
+    "Description": "Testing2",
+    "Content": "Testing2",
+    "StorageKey": [
+        "e58b3000-88b9-42f5-9ba4-6814cac68cbajpeg/path/2026/06"
+    ]
 }
 
 
@@ -55,13 +58,13 @@ Cookie: {{access_token}}
 
 ### Get single blog from user/or current user
 
-GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/read/019edc1e-ae60-700a-918e-c72e9ff189e0
+GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/read/019f058b-c8a1-7e14-b056-45b4210951c9
 Accept: application/json
 Cookie: {{access_token}}
 
 
 ### Get newest blog for new feed
-GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/feed?PageIndex=1&PageSize=1000&FromDate=07/01/2026&ToDate=07/30/2026
+GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/feed?PageIndex=1&PageSize=1000&FromDate=01/01/2025&ToDate=07/30/2026
 Accept: application/json
 Cookie: {{access_token}}
 
@@ -83,3 +86,16 @@ Content-Type: application/json
 DELETE {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/deactive-blog?BlogId=019edc1e-ae60-700a-918e-c72e9ff189e0
 Accept: application/json
 Cookie: {{access_token}}
+
+
+
+### Upload image
+POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/image/upload
+Cookie: {{access_token}}
+Content-Type: application/json
+
+{
+    "FileFormat": [
+        "jpeg"
+    ]
+}

@@ -21,5 +21,5 @@ public class Blog
     public DateTime LastUpdate {get; set;} = DateTime.UtcNow;
 
     public User User {get; set;}
-    public List<BlogImages> BlogImages {get; set;}
+    public List<BlogImages>? BlogImages {get; set;}
 }

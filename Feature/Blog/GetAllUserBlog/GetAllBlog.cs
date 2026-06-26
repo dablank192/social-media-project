@@ -58,7 +58,13 @@ public class Handler(
         .Take(qry.Params.PageSize)
         .Select(t => new BlogDto(
             BlogId: t.Id,
-            UserId: qry.UserId,
+            UserId: t.UserId,
+            StorageKey: t.BlogImages
+            .OrderBy(t => t.DisplayOrder)
+            .Select(
+                t => t.StorageKey
+            )
+            .ToList(),
             Title: t.Title,
             Description: t.Description,
             Content: t.Content,

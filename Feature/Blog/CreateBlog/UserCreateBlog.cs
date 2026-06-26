@@ -1,7 +1,10 @@
 using System;
 using System.Data.Common;
+using System.Net;
+using Amazon.S3;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using vsa_w_controller_csharp.Exception.BlogException;
 using vsa_w_controller_csharp.Exception.ImageException;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
@@ -45,12 +48,43 @@ public class UserCreateBlog(
 
 
 public class Handler(
-    AppDbContext dbContext
+    AppDbContext dbContext,
+    IAmazonS3 s3Client
 ) : IRequestHandler<Command, Result>
 
 {
     public async Task<Result> Handle(Command req, CancellationToken ct)
     {
+        var hasImage = req.StorageKey != null && req.StorageKey.Any();
+
+        if(hasImage)
+        {
+            var validateTask = req.StorageKey.Select(async key =>
+            {
+                try
+                {
+                    var request = new Amazon.S3.Model.GetObjectMetadataRequest
+                    {
+                        BucketName = "products",
+                        Key = key
+                    };
+
+                    await s3Client.GetObjectMetadataAsync(request, ct);
+                    return true;
+                }
+                catch (Amazon.S3.AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return false;
+                }
+            });
+
+            var validation = await Task.WhenAll(validateTask);
+
+            if(validation.Any(t => t == false)) throw new UploadImageException();
+
+        }
+        
+
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
         try
@@ -68,19 +102,22 @@ public class Handler(
             dbContext.Blog.Add(newBlog);
             await dbContext.SaveChangesAsync(ct);
 
-            for(int i = 0; i < req.StorageKey.Count(); i++)
+            if(hasImage)
             {
-                var newImage = new BlogImages
+                for(int i = 0; i < req.StorageKey.Count(); i++)
                 {
-                    BlogId = newBlog.Id,
-                    StorageKey = req.StorageKey[i],
-                    DisplayOrder = i + 1
-                };
+                    var newImage = new BlogImages
+                    {
+                        BlogId = newBlog.Id,
+                        StorageKey = req.StorageKey[i],
+                        DisplayOrder = i + 1
+                    };
 
-                dbContext.BlogImages.Add(newImage);
+                    dbContext.BlogImages.Add(newImage);
+                }
+                await dbContext.SaveChangesAsync(ct);
             }
 
-            await dbContext.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
             
             return new Result(BlogId: newBlog.Id);
@@ -89,9 +126,8 @@ public class Handler(
         catch (System.Exception)
         {
             await transaction.RollbackAsync(ct);
-            throw new UploadImageException();
+            throw new CreatedPostException();
         }
     }
 
-    // ap dung logic moi => chua test
 }

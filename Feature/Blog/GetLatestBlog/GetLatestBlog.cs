@@ -59,6 +59,10 @@ public class Handler(
         .Take(req.PageSize)
         .Select(t => new BlogSummaryDto(
             Title: t.Title,
+            StorageKey: t.BlogImages
+            .OrderBy(t => t.DisplayOrder)
+            .Select(t => t.StorageKey)
+            .ToList(),
             Description: t.Description,
             CreatedAt: t.CreatedAt
         ))
