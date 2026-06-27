@@ -38,7 +38,8 @@ public class GetLatestBlog(
 }
 
 public class Handler(
-    AppDbContext dbContext
+    AppDbContext dbContext,
+    IConfiguration config
 ) : IRequestHandler<Command, Result>
 {
     public async Task<Result> Handle(Command req, CancellationToken ct)
@@ -48,6 +49,9 @@ public class Handler(
 
         var pageIndex = (req.PageIndex - 1) * req.PageSize;
         var totalRecord = await dbContext.Blog.CountAsync(ct);
+
+
+        var s3Endpoint = config.GetSection("S3Storage")["PublicEndpoint"];
 
         var blog = await dbContext.Blog.Where(
             t => t.CreatedAt >= fromDate
@@ -59,9 +63,9 @@ public class Handler(
         .Take(req.PageSize)
         .Select(t => new BlogSummaryDto(
             Title: t.Title,
-            StorageKey: t.BlogImages
+            ImageUrl: t.BlogImages
             .OrderBy(t => t.DisplayOrder)
-            .Select(t => t.StorageKey)
+            .Select(t => s3Endpoint + "/" + t.StorageKey)
             .ToList(),
             Description: t.Description,
             CreatedAt: t.CreatedAt

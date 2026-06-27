@@ -41,7 +41,8 @@ public class GetAllBlog(
 
 
 public class Handler(
-    AppDbContext dbContext
+    AppDbContext dbContext,
+    IConfiguration config
 ) : IRequestHandler<Query, Result>
 
 {
@@ -49,6 +50,8 @@ public class Handler(
     {
         var index = (qry.Params.PageIndex - 1) * qry.Params.PageSize;
         var totalRecord = await dbContext.Blog.CountAsync(ct);
+
+        var s3Endpoint = config.GetSection("S3Storage")["PublicEndpoint"];
 
         var allBlog = await dbContext.Blog
         .Where(t => t.UserId == qry.UserId) //Need to add condition: status=inactive, but leave at this for for development purpose
@@ -59,11 +62,9 @@ public class Handler(
         .Select(t => new BlogDto(
             BlogId: t.Id,
             UserId: t.UserId,
-            StorageKey: t.BlogImages
+            ImageUrl: t.BlogImages
             .OrderBy(t => t.DisplayOrder)
-            .Select(
-                t => t.StorageKey
-            )
+            .Select(t => s3Endpoint + "/" +t.StorageKey)
             .ToList(),
             Title: t.Title,
             Description: t.Description,
@@ -72,6 +73,7 @@ public class Handler(
             CreatedAt: t.CreatedAt
         ))
         .ToListAsync(ct);
+
 
         var response = new Result(
             Response: allBlog,

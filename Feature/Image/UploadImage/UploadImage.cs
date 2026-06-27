@@ -41,8 +41,8 @@ public class Handler(
         
         foreach(var file in req.FileFormat)
         {
-            var uniqueFileName = $"{Guid.NewGuid()}{file}";
-            var storageKey = $"{uniqueFileName}/{customFolderPath}";
+            var uniqueFileName = $"{Guid.NewGuid()}.{file}";
+            var storageKey = $"{customFolderPath}/{uniqueFileName}";
 
             var preSignedUrlRequest = new GetPreSignedUrlRequest
             {

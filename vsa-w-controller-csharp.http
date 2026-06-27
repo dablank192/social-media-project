@@ -1,7 +1,8 @@
 @vsa_w_controller_csharp_HostAddress = http://localhost:5169
 @docker_host = http://localhost:8080
-@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODI1MTE0NjJ9.iZJu5HOOBzb0djjjM9IIZNQsZFIBHztE8OBwRwe-Bq8
+@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODI1OTc2OTV9.vkJQdZB1p3KkFDI-6w8uRFnQ5bhCoOcxwr5P_9k12oQ
 @refresh_token = x-refresh-token=rqcuODdxIqS%2BQ264AZHW%2Fx3mCAF5aI50qdHM14S6ZbfQvR5e1hIoQwrhh6KAhsF8FeQnzVAygLE%2F12IuBkfbGg%3D%3D
+@presigned_url = https://amcyjsdejcdianlhhwkt.storage.supabase.co/storage/v1/s3/products/path/2026/06/996a711d-b24e-44e7-b4f1-95dba90bb255.png?X-Amz-Expires=300&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dfb7ccf08a59fe4135f9ada22023ebac%2F20260627%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260627T202511Z&X-Amz-SignedHeaders=host&X-Amz-Signature=ed5a0d35877e4a1c7af0ac4bb75244966c92168468cc6dab5db5ae67fdde66c3
 
 GET {{vsa_w_controller_csharp_HostAddress}}/weatherforecast/
 Accept: application/json
@@ -33,7 +34,7 @@ Content-Type: application/json
 Cookie: {{refresh_token}}
 
 
-### User create blog
+### Create a blog
 
 POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/new-blog
 Content-Type: application/json
@@ -41,13 +42,20 @@ Cookie: {{access_token}}
 Accept: application/json
 
 {
-    "Title": "Example2",
-    "Description": "Testing2",
-    "Content": "Testing2",
+    "Title": "Example5",
+    "Description": "Testing5",
+    "Content": "Testing5",
     "StorageKey": [
-        "e58b3000-88b9-42f5-9ba4-6814cac68cbajpeg/path/2026/06"
+        "path/2026/06/996a711d-b24e-44e7-b4f1-95dba90bb255.png"
     ]
 }
+
+
+### Upload image through presigned url
+PUT {{presigned_url}}
+Content-Type: image/png
+
+< C:\Users\admin\Pictures\saber.png
 
 
 ### Get all blog from current user
@@ -58,7 +66,7 @@ Cookie: {{access_token}}
 
 ### Get single blog from user/or current user
 
-GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/read/019f058b-c8a1-7e14-b056-45b4210951c9
+GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/read/019f0ac2-832c-7c88-b5a1-a8e05a38a745
 Accept: application/json
 Cookie: {{access_token}}
 
@@ -96,6 +104,6 @@ Content-Type: application/json
 
 {
     "FileFormat": [
-        "jpeg"
+        "png"
     ]
 }

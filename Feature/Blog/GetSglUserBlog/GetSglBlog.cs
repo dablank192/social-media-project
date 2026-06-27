@@ -32,19 +32,22 @@ public class GetSglBlog(
 
 
 public class Handler(
-    AppDbContext dbContext
+    AppDbContext dbContext,
+    IConfiguration config
 ) : IRequestHandler<Query, Result>
 {
     public async Task<Result> Handle(Query qry, CancellationToken ct)
     {
+        var s3Endpoint = config.GetSection("S3Storage")["PublicEndpoint"];
+        
         var blog = await dbContext.Blog
         .Where(t => t.Id == qry.BlogId)
         .Select(t => new BlogDto(
             BlogId: t.Id,
             UserId: t.UserId,
-            StorageKey: t.BlogImages
+            ImageUrl: t.BlogImages
             .OrderBy(t => t.DisplayOrder)
-            .Select(t => t.StorageKey)
+            .Select(t => s3Endpoint + "/" + t.StorageKey)
             .ToList(),
             Title: t.Title,
             Description: t.Description,
