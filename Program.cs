@@ -71,6 +71,12 @@ builder.Services.AddAuthentication(option =>
 });
 
 
+// Add Exception Handler
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+
 //Add Controller
 
 builder.Services.AddControllers();

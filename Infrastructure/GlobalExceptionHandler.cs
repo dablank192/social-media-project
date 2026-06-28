@@ -22,59 +22,58 @@ public class GlobalExceptionHandler(
     {
         logger.LogError(exception, exception.Message);
 
-        var problemDetail = new ProblemDetails
+
+        var (statusCode, detailMessage) = exception switch
         {
-            Title = "Error",
-            Detail= "An unknown error has occur",
-            Status= StatusCodes.Status500InternalServerError,
-            Instance= context.Request.Path
+            DuplicateUsernameException => (
+                StatusCodes.Status409Conflict,
+                "User is already exist"
+            ),
+
+            InvalidCredentialsException => (
+                StatusCodes.Status401Unauthorized,
+                "Invalid username or password"
+            ),
+
+            DeleteBlogNotFoundException => (
+                StatusCodes.Status404NotFound,
+                "Can't find blog's id for termination"
+            ),
+
+            InvalidRefreshTokenException => (
+                StatusCodes.Status401Unauthorized,
+                "Can't identify refresh token"
+            ),
+
+            UploadImageException => (
+                StatusCodes.Status400BadRequest,
+                "Exception while uploading image"
+            ),
+
+            UpdateBlogNotFoundException => (
+                StatusCodes.Status404NotFound,
+                "Can't find blog's id for update"
+            ),
+
+            _ => (
+                StatusCodes.Status500InternalServerError,
+                "An unknown error has occur"
+            )
         };
 
-        if(exception is DuplicateUsernameException)
-        {
-            context.Response.StatusCode = StatusCodes.Status200OK;
-            problemDetail.Detail = "User is already exist";
-            problemDetail.Status = StatusCodes.Status409Conflict;
-        }
+        context.Response.StatusCode = statusCode;
 
-        else if (exception is InvalidCredentialsException)
+        var problemDetail = new ProblemDetails
         {
-            context.Response.StatusCode = StatusCodes.Status200OK;
-            problemDetail.Detail = "Invalid username or password";
-            problemDetail.Status = StatusCodes.Status401Unauthorized;
-        }
+            Detail = detailMessage,
+            Status = statusCode,
+            Instance = context.Request.Path
+        };
 
-        else if (exception is InvalidRefreshTokenException)
-        {
-            context.Response.StatusCode = StatusCodes.Status200OK;
-            problemDetail.Detail = "Can't identify refresh token";
-            problemDetail.Status = StatusCodes.Status401Unauthorized;
-        }
-
-        else if (exception is DeleteBlogNotFoundException)
-        {
-            context.Response.StatusCode = StatusCodes.Status200OK;
-            problemDetail.Detail = "Can't find blog's id for termination";
-            problemDetail.Status = StatusCodes.Status404NotFound;
-        }
-
-        else if (exception is UpdateBlogNotFoundException)
-        {
-            context.Response.StatusCode = StatusCodes.Status200OK;
-            problemDetail.Detail = "Can't find blog's id for update";
-            problemDetail.Status = StatusCodes.Status404NotFound;
-        }
-
-        else if (exception is UploadImageException)
-        {
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            problemDetail.Detail = "Exception while uploading image";
-            problemDetail.Status = StatusCodes.Status400BadRequest;
-        }
 
         if (env.IsDevelopment())
         {
-            problemDetail.Extensions.Add("Detail", exception.Message);
+            problemDetail.Extensions.Add("SystemDetail", exception.Message);
             problemDetail.Extensions.Add("Traceback", exception.StackTrace);
         }
 
