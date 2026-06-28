@@ -38,6 +38,8 @@
     <Folder Include="Feature\Blog\GetSglUserBlog\" />
     <Folder Include="Feature\Blog\UpdateAUserBlog\" />
     <Folder Include="Feature\Image\GetImage\" />
+    <Folder Include="Feature\Likes\" />
+    <Folder Include="Feature\Likes\LikeBlog\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Infrastructure\DbConfig\" />
     <Folder Include="Model\" />
