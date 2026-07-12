@@ -23,4 +23,5 @@ public class Blog
     public User User {get; set;}
     public List<BlogImages>? BlogImages {get; set;}
     public List<BlogLikes> BlogLikes {get; set;}
+    public List<Comment> Comment {get; set;}
 }

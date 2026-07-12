@@ -26,6 +26,7 @@
     <Folder Include="Exception\" />
     <Folder Include="Exception\AuthException\" />
     <Folder Include="Exception\BlogException\" />
+    <Folder Include="Exception\Comment\" />
     <Folder Include="Exception\ImageException\" />
     <Folder Include="Feature\Auth\" />
     <Folder Include="Feature\Auth\Login\" />
@@ -37,6 +38,8 @@
     <Folder Include="Feature\Blog\GetLatestBlog\" />
     <Folder Include="Feature\Blog\GetSglUserBlog\" />
     <Folder Include="Feature\Blog\UpdateAUserBlog\" />
+    <Folder Include="Feature\Comment\" />
+    <Folder Include="Feature\Comment\CreateComment\" />
     <Folder Include="Feature\Image\GetImage\" />
     <Folder Include="Feature\Likes\" />
     <Folder Include="Feature\Likes\LikeBlog\" />

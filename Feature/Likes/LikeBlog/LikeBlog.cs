@@ -70,7 +70,5 @@ public class Handler(
         await dbContext.SaveChangesAsync(ct);
 
         return new Result(Message: $"Like added to Blog Id");
-
-        //chua test
     }
 }

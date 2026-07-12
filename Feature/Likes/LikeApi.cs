@@ -9,5 +9,5 @@ namespace vsa_w_controller_csharp.Feature.Likes;
 [Route("api/v1/vsac/like")]
 public class LikeApi : ControllerBase
 {
-
+    
 }
