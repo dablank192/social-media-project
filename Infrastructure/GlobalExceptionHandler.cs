@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using vsa_w_controller_csharp.Exception.AuthException;
 using vsa_w_controller_csharp.Exception.BlogException;
+using vsa_w_controller_csharp.Exception.Comment;
 using vsa_w_controller_csharp.Exception.ImageException;
 using vsa_w_controller_csharp.Feature.Blog.UpdateAUserBlog;
 
@@ -53,6 +54,11 @@ public class GlobalExceptionHandler(
             UpdateBlogNotFoundException => (
                 StatusCodes.Status404NotFound,
                 "Can't find blog's id for update"
+            ),
+
+            CommentNotFoundException => (
+                StatusCodes.Status404NotFound,
+                "Can't find parent comment's id"
             ),
 
             _ => (
