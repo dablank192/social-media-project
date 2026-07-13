@@ -12,6 +12,12 @@ public class CommentConfig : IEntityTypeConfiguration<Comment>
         builder.ToTable("Comment");
         builder.HasKey(t => t.Id);
 
+        builder.HasIndex(t => t.BlogId);
+        builder.HasIndex(t => t.ParentCommentId);
+        builder.HasIndex(t => t.CreatedAt);
+        builder.HasIndex(t => t.UserId);
+
+
         builder.HasOne(t => t.ParentComment)
         .WithMany(t => t.Reply)
         .HasForeignKey(t => t.ParentCommentId)
