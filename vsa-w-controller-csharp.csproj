@@ -40,6 +40,7 @@
     <Folder Include="Feature\Blog\UpdateAUserBlog\" />
     <Folder Include="Feature\Comment\" />
     <Folder Include="Feature\Comment\CreateComment\" />
+    <Folder Include="Feature\Comment\DeleteComment\" />
     <Folder Include="Feature\Comment\GetComment\" />
     <Folder Include="Feature\Image\GetImage\" />
     <Folder Include="Feature\Likes\" />
