@@ -1,6 +1,6 @@
 @vsa_w_controller_csharp_HostAddress = http://localhost:5169
 @docker_host = http://localhost:8080
-@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODQxMjgxMjJ9.-1xgd_zWynPj5bzpxVRMDBi5UnOZSisJwHL1vXwimpg
+@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODQxMzAwNjd9.YnxayzV4yE3SJd0bURaUO2xsS0_HcfWwmJ719pndAHg
 @refresh_token = x-refresh-token=rqcuODdxIqS%2BQ264AZHW%2Fx3mCAF5aI50qdHM14S6ZbfQvR5e1hIoQwrhh6KAhsF8FeQnzVAygLE%2F12IuBkfbGg%3D%3D
 @presigned_url = https://amcyjsdejcdianlhhwkt.storage.supabase.co/storage/v1/s3/products/path/2026/06/996a711d-b24e-44e7-b4f1-95dba90bb255.png?X-Amz-Expires=300&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dfb7ccf08a59fe4135f9ada22023ebac%2F20260627%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260627T202511Z&X-Amz-SignedHeaders=host&X-Amz-Signature=ed5a0d35877e4a1c7af0ac4bb75244966c92168468cc6dab5db5ae67fdde66c3
 
@@ -125,14 +125,14 @@ Cookie: {{access_token}}
 Content-Type: application/json
 
 {
-    "BlogId": "019ecc2d-9963-741c-a6c7-410e1151479f",
-    "Content": "Hello world2",
-    "ParentCommentId": null
+    "BlogId": "019f058b-c8a1-7e14-b056-45b4210951c9",
+    "Content": "child03",
+    "ParentCommentId": "019f6603-bcdb-7bee-9cbb-df153db7e876"
 }
 
 
 ### Get a Comment
-GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/comment?blogid=019ecc2d-9963-741c-a6c7-410e1151479f&pageindex=1&pagesize=1000
+GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/comment?blogid=019f058b-c8a1-7e14-b056-45b4210951c9&pageindex=1&pagesize=1000
 Cookie: {{access_token}}
 Content-Type: application/json
 
@@ -140,3 +140,9 @@ Content-Type: application/json
 ### Delete Comment
 DELETE {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/comment/delete/019f565c-37dc-730b-b99e-f979000213c1
 Cookie: {{access_token}}
+
+
+### Get Replies
+GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/comment/all-reply?commentid=019f6603-bcdb-7bee-9cbb-df153db7e876&pageIndex=1&pageSize=1000
+Cookie: {{access_token}}
+Content-Type: application/json
