@@ -46,7 +46,5 @@ public class Handler(
         await dbContext.SaveChangesAsync(ct);
 
         return new Result(Message: "Comment deleted successfully!");
-
-        //chua test
     }
 }

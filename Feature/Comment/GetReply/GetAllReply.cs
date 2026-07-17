@@ -67,7 +67,5 @@ public class Handler(
         );
 
         return response;
-
-        //chua test
     }
 }
