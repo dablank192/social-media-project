@@ -6,6 +6,7 @@ using vsa_w_controller_csharp.Exception.AuthException;
 using vsa_w_controller_csharp.Exception.BlogException;
 using vsa_w_controller_csharp.Exception.Comment;
 using vsa_w_controller_csharp.Exception.ImageException;
+using vsa_w_controller_csharp.Exception.UserException;
 using vsa_w_controller_csharp.Feature.Blog.UpdateAUserBlog;
 
 namespace vsa_w_controller_csharp.Infrastructure;
@@ -59,6 +60,16 @@ public class GlobalExceptionHandler(
             CommentNotFoundException => (
                 StatusCodes.Status404NotFound,
                 "Can't find parent comment's id"
+            ),
+
+            UserIdNotFoundException => (
+                StatusCodes.Status404NotFound,
+                "Can't find User's Id"
+            ),
+
+            UserProfileNotFoundException => (
+                StatusCodes.Status404NotFound,
+                "Can't find User's profile"
             ),
 
             _ => (
