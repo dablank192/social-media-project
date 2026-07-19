@@ -28,6 +28,7 @@
     <Folder Include="Exception\BlogException\" />
     <Folder Include="Exception\Comment\" />
     <Folder Include="Exception\ImageException\" />
+    <Folder Include="Exception\UserException\" />
     <Folder Include="Feature\Auth\" />
     <Folder Include="Feature\Auth\Login\" />
     <Folder Include="Feature\Auth\Refresh\" />
@@ -47,6 +48,7 @@
     <Folder Include="Feature\Image\GetImage\" />
     <Folder Include="Feature\Likes\" />
     <Folder Include="Feature\Likes\LikeBlog\" />
+    <Folder Include="Feature\User\UserProfile\CreateUserProfile\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Infrastructure\DbConfig\" />
     <Folder Include="Model\" />

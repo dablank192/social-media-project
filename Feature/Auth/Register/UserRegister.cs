@@ -32,7 +32,8 @@ public class UserRegister(
 }
 
 public class Handler(
-    AppDbContext dbContext
+    AppDbContext dbContext,
+    IPublisher publisher
 ) : IRequestHandler<Command, Result>
 
 {
@@ -49,13 +50,16 @@ public class Handler(
 
         var hashedPassword = hash.HashPassword(new object() ,req.Password);
 
-        var newUser = new User
+        var newUser = new Model.User
         {
             UserName= req.Username,
             Password= hashedPassword
         };
 
         dbContext.User.Add(newUser);
+
+        await publisher.Publish(new UserRegisteredEvent(newUser.Id), ct);
+
         await dbContext.SaveChangesAsync(ct);
 
         var response = new Result(newUser.Id);

@@ -1,6 +1,7 @@
 @vsa_w_controller_csharp_HostAddress = http://localhost:5169
+@proxy = http://127.0.0.1:5000
 @docker_host = http://localhost:8080
-@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTllYzRiNS1lNzQ4LTc0MDUtOWQxYy0xZjllNDU4NWRlOTQiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjMiLCJleHAiOjE3ODQzMDI1ODN9._Wiis0FGULNsVOEJJsRaea31eq9hXJaHKmI_f2WREm0
+@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTlmNzk4Zi05NzM2LTdhODItYjFlYi0xZGM4ZGZjMWRlYmMiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjM0IiwiZXhwIjoxNzg0NDU4MDg5fQ.sTLqNgFegHJmJtZdGIoCgk7uF3l6pgBVmxwAKKpjq2w
 @refresh_token = x-refresh-token=rqcuODdxIqS%2BQ264AZHW%2Fx3mCAF5aI50qdHM14S6ZbfQvR5e1hIoQwrhh6KAhsF8FeQnzVAygLE%2F12IuBkfbGg%3D%3D
 @presigned_url = https://amcyjsdejcdianlhhwkt.storage.supabase.co/storage/v1/s3/products/path/2026/06/996a711d-b24e-44e7-b4f1-95dba90bb255.png?X-Amz-Expires=300&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dfb7ccf08a59fe4135f9ada22023ebac%2F20260627%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260627T202511Z&X-Amz-SignedHeaders=host&X-Amz-Signature=ed5a0d35877e4a1c7af0ac4bb75244966c92168468cc6dab5db5ae67fdde66c3
 
@@ -10,13 +11,13 @@ Accept: application/json
 
 ### User Register
 
-POST {{docker_host}}/api/v1/vsac/auth/register
+POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/auth/register
 Content-Type: application/json
 Accept: application/json
 
 {
-    "username": "example123",
-    "password": "example123"
+    "username": "example1234",
+    "password": "example1234"
 }
 
 ### User Login
@@ -24,9 +25,20 @@ POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/auth/login
 Content-Type: application/json
 
 {
+    "username": "example1234",
+    "password": "example1234"
+}
+
+### User Login - Proxy
+
+POST {{proxy}}/api/v1/vsac/auth/login
+Content-Type: application/json
+
+{
     "username": "example123",
     "password": "example123"
 }
+
 
 ### User Refresh Token
 POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/auth/refresh
@@ -156,4 +168,21 @@ Content-Type: application/json
 {
     "CommentId": "019f6603-bcdb-7bee-9cbb-df153db7e876",
     "Content": "Change of comment"
+}
+
+
+### Update User Profile
+PUT {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/user/update
+Cookie: {{access_token}}
+Content-Type: application/json
+
+{
+    "firstname": "fpt",
+    "middlename": "",
+    "lastname": "nguyen",
+    "phonenumber": "12314325345",
+    "contactemail": "tester@fpt.com",
+    "headline": "Business Analyst - Senior",
+    "bio": "A enthusiast developer",
+    "PortfolioWebsiteUrl": "https://github.com/dablank192"
 }

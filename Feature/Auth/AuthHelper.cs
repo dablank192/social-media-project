@@ -12,14 +12,14 @@ namespace vsa_w_controller_csharp.Feature.Auth;
 
 public interface IAuthHelper
 {
-    string GenerateJwtToken(User user);
+    string GenerateJwtToken(Model.User user);
 }
 
 public class AuthHelper(
     IConfiguration config
 ) : IAuthHelper
 {
-    public string GenerateJwtToken(User user)
+    public string GenerateJwtToken(Model.User user)
     {
         var secretKey = config.GetSection("Jwt")["Key"];
 

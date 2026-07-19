@@ -14,4 +14,5 @@ public class User
     public List<RefreshToken> RefreshToken {get; set;}
     public List<BlogLikes> BlogLikes {get; set;}
     public List<Comment> Comment {get; set;}
+    public List<UserProfile> UserProfile {get; set;}
 }

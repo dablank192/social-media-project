@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<RefreshToken> RefreshToken {get; set;}
     public DbSet<BlogLikes> BlogLikes {get; set;}
     public DbSet<Comment> Comment {get; set;}
+    public DbSet<UserProfile> UserProfile {get; set;}
 
     public void Configure(ModelBuilder modelBuilder)
     {
