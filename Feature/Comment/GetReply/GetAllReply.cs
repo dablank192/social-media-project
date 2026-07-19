@@ -49,7 +49,11 @@ public class Handler(
         var index = (req.PageIndex - 1) * req.PageSize;
         var totalPage = (totalRecord + req.PageSize - 1) / req.PageSize;
 
-        var replies = await root.Select(t => new ReplyDto(
+        var replies = await root
+        .Skip(index)
+        .Take(req.PageSize)
+        .OrderByDescending(t => t.CreatedAt)
+        .Select(t => new ReplyDto(
             BlogId: t.BlogId,
             CommentId: t.Id,
             ParentCommentId: t.ParentCommentId,

@@ -73,6 +73,8 @@ public class Handler(
             providedPassword: req.Password
             );
 
+        if (validPassword == PasswordVerificationResult.Failed) throw new InvalidCredentialsException();
+
         var accessToken = helper.GenerateJwtToken(validUser);
 
         var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));

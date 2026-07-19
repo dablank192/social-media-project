@@ -14,7 +14,7 @@ public class BlogImagesConfig : IEntityTypeConfiguration<BlogImages>
 
         builder.HasOne(t => t.Blog)
         .WithMany(t => t.BlogImages)
-        .HasForeignKey( t => t.Id)
+        .HasForeignKey( t => t.BlogId)
         .OnDelete(DeleteBehavior.Restrict);
 
     }

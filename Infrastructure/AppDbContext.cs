@@ -16,7 +16,7 @@ public class AppDbContext : DbContext
     public DbSet<Comment> Comment {get; set;}
     public DbSet<UserProfile> UserProfile {get; set;}
 
-    public void Configure(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 

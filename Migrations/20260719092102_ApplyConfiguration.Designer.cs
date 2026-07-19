@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using vsa_w_controller_csharp.Infrastructure;
@@ -11,9 +12,11 @@ using vsa_w_controller_csharp.Infrastructure;
 namespace vsa_w_controller_csharp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260719092102_ApplyConfiguration")]
+    partial class ApplyConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +73,6 @@ namespace vsa_w_controller_csharp.Migrations
             modelBuilder.Entity("vsa_w_controller_csharp.Model.BlogImages", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("BlogId")
@@ -83,8 +85,6 @@ namespace vsa_w_controller_csharp.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BlogId");
 
                     b.ToTable("BlogImages", (string)null);
                 });
@@ -258,8 +258,7 @@ namespace vsa_w_controller_csharp.Migrations
 
                     b.HasIndex("PhoneNumber");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserProfile", (string)null);
                 });
@@ -279,8 +278,9 @@ namespace vsa_w_controller_csharp.Migrations
                 {
                     b.HasOne("vsa_w_controller_csharp.Model.Blog", "Blog")
                         .WithMany("BlogImages")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Blog");
                 });
@@ -344,9 +344,9 @@ namespace vsa_w_controller_csharp.Migrations
             modelBuilder.Entity("vsa_w_controller_csharp.Model.UserProfile", b =>
                 {
                     b.HasOne("vsa_w_controller_csharp.Model.User", "User")
-                        .WithOne("UserProfile")
-                        .HasForeignKey("vsa_w_controller_csharp.Model.UserProfile", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("UserProfile")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -376,8 +376,7 @@ namespace vsa_w_controller_csharp.Migrations
 
                     b.Navigation("RefreshToken");
 
-                    b.Navigation("UserProfile")
-                        .IsRequired();
+                    b.Navigation("UserProfile");
                 });
 #pragma warning restore 612, 618
         }

@@ -47,7 +47,9 @@ public class Handler(
 {
     public async Task<Result> Handle(Command req, CancellationToken ct)
     {
-        var blog = await dbContext.Blog.FirstOrDefaultAsync(t => t.Id == req.BlogId, ct)
+        var blog = await dbContext.Blog.FirstOrDefaultAsync(
+            t => t.Id == req.BlogId
+            && t.UserId == req.UserId, ct)
         ?? throw new DeleteBlogNotFoundException();
 
         blog.Status = BlogStatus.InActive;
