@@ -49,6 +49,7 @@
     <Folder Include="Feature\Likes\" />
     <Folder Include="Feature\Likes\LikeBlog\" />
     <Folder Include="Feature\User\UserProfile\CreateUserProfile\" />
+    <Folder Include="Feature\User\UserProfile\GetUserProfile\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Infrastructure\DbConfig\" />
     <Folder Include="Model\" />
