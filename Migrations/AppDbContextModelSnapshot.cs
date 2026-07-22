@@ -232,8 +232,8 @@ namespace vsa_w_controller_csharp.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("character varying(120)");
 
-                    b.Property<string>("IsPublic")
-                        .HasColumnType("text");
+                    b.Property<int>("IsPublic")
+                        .HasColumnType("integer");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(100)
