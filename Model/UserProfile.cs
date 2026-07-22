@@ -1,8 +1,10 @@
 using System;
+using System.Text.Json.Serialization;
 using Amazon;
 
 namespace vsa_w_controller_csharp.Model;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ProfileStatus
 {
     Public = 0,

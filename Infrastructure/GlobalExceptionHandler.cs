@@ -69,7 +69,12 @@ public class GlobalExceptionHandler(
 
             UserProfileNotFoundException => (
                 StatusCodes.Status404NotFound,
-                "Can't find User's profile"
+                "User's profile was either not existed or was set private"
+            ),
+
+            InvalidUserProfileStatusException => (
+                StatusCodes.Status404NotFound,
+                "Profile's status are the same as the requested status"
             ),
 
             _ => (

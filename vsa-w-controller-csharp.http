@@ -58,9 +58,10 @@ Accept: application/json
     "Description": "Testing5",
     "Content": "Testing5",
     "StorageKey": [
-        "path/2026/06/996a711d-b24e-44e7-b4f1-95dba90bb255.png"
+        
     ]
 }
+        # "path/2026/06/996a711d-b24e-44e7-b4f1-95dba90bb255.png"
 
 
 ### Upload image through presigned url
@@ -78,7 +79,7 @@ Cookie: {{access_token}}
 
 ### Get single blog from user/or current user
 
-GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/read/019f0ac2-832c-7c88-b5a1-a8e05a38a745
+GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/blog/read/019f89ff-8c21-70b0-9132-c9ccb64e1eb8
 Accept: application/json
 Cookie: {{access_token}}
 
@@ -137,14 +138,14 @@ Cookie: {{access_token}}
 Content-Type: application/json
 
 {
-    "BlogId": "019f058b-c8a1-7e14-b056-45b4210951c9",
-    "Content": "child03",
-    "ParentCommentId": "019f6603-bcdb-7bee-9cbb-df153db7e876"
+    "BlogId": "019f89ff-8c21-70b0-9132-c9ccb64e1eb8",
+    "Content": "father2",
+    "ParentCommentId": null
 }
 
 
 ### Get a Comment
-GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/comment?blogid=019f058b-c8a1-7e14-b056-45b4210951c9&pageindex=1&pagesize=1000
+GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/comment?blogid=019f89ff-8c21-70b0-9132-c9ccb64e1eb8&pageindex=1&pagesize=1000
 Cookie: {{access_token}}
 Content-Type: application/json
 
@@ -190,5 +191,15 @@ Content-Type: application/json
 
 ### Get User Profile
 
-GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/user/profile
+GET {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/user/profile/019f89fe-0671-7c10-9ad8-1e90306880f0
 Cookie: {{access_token}}
+
+
+### Update User Status
+POST {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/user/profile-visibility
+Cookie: {{access_token}}
+Content-Type: application/json
+
+{
+    "status": "Private"
+}

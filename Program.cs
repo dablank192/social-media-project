@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Amazon.S3;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
