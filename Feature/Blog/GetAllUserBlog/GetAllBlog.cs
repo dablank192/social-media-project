@@ -2,8 +2,8 @@ using System;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using vsa_w_controller_csharp.Feature.Auth.Login;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 namespace vsa_w_controller_csharp.Feature.Blog.GetAllUserBlog;
 
@@ -62,9 +62,9 @@ public class Handler(
         .Select(t => new BlogDto(
             BlogId: t.Id,
             UserId: t.UserId,
-            ImageUrl: t.BlogImages
+            ImageDetails: t.BlogImages
             .OrderBy(t => t.DisplayOrder)
-            .Select(t => s3Endpoint + "/" +t.StorageKey)
+            .Select(t => new ImageMetadata(SecureUrl: t.ImageUrl, PublicId: t.PublicId))
             .ToList(),
             Title: t.Title,
             Description: t.Description,

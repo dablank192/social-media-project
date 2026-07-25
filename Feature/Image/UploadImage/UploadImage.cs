@@ -1,17 +1,17 @@
 using System;
-using Amazon.S3;
-using Amazon.S3.Model;
+
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using vsa_w_controller_csharp.Exception.ImageException;
+using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 
 namespace vsa_w_controller_csharp.Feature.Image.UploadImage;
 
-public record ImageDetail(string StorageUrl, string StorageKey);
 
-public record Command(List<string> FileFormat) : IRequest<Result>;
+public record Command(List<IFormFile> FileImage, string FolderName) : IRequest<Result>;
 public record Result(
-    List<ImageDetail> ImageDetail);
+    List<ImageMetadata> ImageDetail);
 
 public class UploadImage(
     ISender sender
@@ -28,34 +28,32 @@ public class UploadImage(
 }
 
 public class Handler(
-    IAmazonS3 s3Client
+    ICldImageManagement cloudinaryClient
 ) : IRequestHandler<Command, Result>
 
 {
     public async Task<Result> Handle (Command req, CancellationToken ct)
     {
-        var ImageDetail = new List<ImageDetail>();
-        
-        var customFolderPath = $"path/{DateTime.Now:yyyy/MM}";
+        var ImageDetail = new List<ImageMetadata>();
 
-        
-        foreach(var file in req.FileFormat)
+        var uploadTask = req.FileImage.Select(async file =>
         {
-            var uniqueFileName = $"{Guid.NewGuid()}.{file}";
-            var storageKey = $"{customFolderPath}/{uniqueFileName}";
-
-            var preSignedUrlRequest = new GetPreSignedUrlRequest
+            try
             {
-                BucketName = "products",
-                Key = storageKey,
-                Verb = HttpVerb.PUT,
-                Expires = DateTime.UtcNow.AddMinutes(5)
-            };
+                var result = await cloudinaryClient.UploadImageToCldAsync(file, req.FolderName);
+                ImageDetail.AddRange(result);
 
-            string signedUploadUrl = s3Client.GetPreSignedURL(preSignedUrlRequest);
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+        });
 
-            ImageDetail.Add(new ImageDetail(StorageUrl: signedUploadUrl, StorageKey: storageKey));
-        }
+        var finishedTask = await Task.WhenAll(uploadTask);
+        
+        if(finishedTask.Any(t => t == false)) throw new UploadImageException(null);
 
         return new Result(ImageDetail);
 

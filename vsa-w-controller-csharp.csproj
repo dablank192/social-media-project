@@ -55,8 +55,6 @@
     <Folder Include="Infrastructure\" />
     <Folder Include="Infrastructure\DbConfig\" />
     <Folder Include="Model\" />
-    <Folder Include="Share\" />
-    <Folder Include="Share\CloudinaryImgUpload\" />
   </ItemGroup>
 
 </Project>
