@@ -76,6 +76,18 @@ public class GlobalExceptionHandler(
                 StatusCodes.Status404NotFound,
                 "Profile's status are the same as the requested status"
             ),
+            CannotFindImageException => (
+                StatusCodes.Status404NotFound,
+                "System can't recognize image file"
+            ),
+            FileTooLargeException => (
+                StatusCodes.Status406NotAcceptable,
+                "The upload file is too large to process"
+            ),
+            InvalidFileFormat => (
+                StatusCodes.Status400BadRequest,
+                "File format is not valid"
+            ),
 
             _ => (
                 StatusCodes.Status500InternalServerError,
