@@ -1,28 +1,26 @@
 using System;
-using Amazon.S3.Model;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using vsa_w_controller_csharp.Exception.ImageException;
-using vsa_w_controller_csharp.Feature.Auth.Login;
 
 namespace vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 public record ImageMetadata(
-    string SecureUrl,
-    string PublicId
+    string? SecureUrl,
+    string? PublicId
 );
 
-public class CldUploadImage(
+public class CldImageManagement(
     Cloudinary cloudinaryClient
-) : ICldUploadImage
+) : ICldImageManagement
 {
-    public async Task<ImageMetadata> UploadImageToCldAsync(IFormFile fileImage)
+    public async Task<ImageMetadata> UploadImageToCldAsync(IFormFile fileImage, string folderName)
     {
         var allowedExtension = new[] {".jpeg", ".png", ".jpg", ".webp"};
 
         var fileExtension = Path.GetExtension(fileImage.FileName).ToLowerInvariant();
 
-        var fileMaxSize = 5 * 1024 * 1024;
+        var fileMaxSize = 5 * 1024 * 1024; //5MB
 
         if(fileImage == null || fileImage.Length == 0)
         {
@@ -44,7 +42,7 @@ public class CldUploadImage(
             var file = new ImageUploadParams
             {
                 File =  new FileDescription(fileImage.FileName, fileStream),
-                Folder = "Image/Avatar"
+                Folder = $"Image/{folderName}"
             };
 
             var result = await cloudinaryClient.UploadAsync(file);
@@ -63,5 +61,24 @@ public class CldUploadImage(
             throw new UploadImageException(ex.ToString());
         }
 
+    }
+
+    public async Task DeleteImageCldAsync(string publicId)
+    {
+        try
+        {
+            var deletedImg = new DeletionParams(publicId: publicId);
+            
+            var result = await cloudinaryClient.DestroyAsync(deletedImg);
+            if(result.Error != null || result.Result != "ok")
+            {
+                throw new DeleteImageException(result.Error.Message);
+            }
+        }
+        catch(System.Exception ex)
+        {
+            throw new DeleteImageException(ex.ToString());
+        }
+        
     }
 }

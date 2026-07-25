@@ -12,7 +12,8 @@ public class BlogImages
 {
     public Guid Id {get; set;}
     public Guid? BlogId {get; set;}
-    public string? StorageKey {get; set;}
+    public string? ImageUrl {get; set;}
+    public string? PublicId {get; set;}
     public int? DisplayOrder {get; set;}
 
     public Blog Blog {get; set;}

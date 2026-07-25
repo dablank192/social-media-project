@@ -88,6 +88,10 @@ public class GlobalExceptionHandler(
                 StatusCodes.Status400BadRequest,
                 "File format is not valid"
             ),
+            DeleteImageException => (
+                StatusCodes.Status503ServiceUnavailable,
+                "Error occur while trying to delete image files"
+            ),
 
             _ => (
                 StatusCodes.Status500InternalServerError,

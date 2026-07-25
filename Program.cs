@@ -3,11 +3,11 @@ using System.Text.Json.Serialization;
 using Amazon.S3;
 using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using vsa_w_controller_csharp.Feature.Auth;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +25,7 @@ builder.Services.AddMediatR(config =>
 // Add dependencies to the container
 
 builder.Services.AddScoped<IAuthHelper, AuthHelper>();
+builder.Services.AddScoped<ICldImageManagement, CldImageManagement>();
 
 
 // Add database connection
@@ -100,26 +101,26 @@ builder.Services.AddCors(option =>
 });
 
 
-// Supabase S3 Storage config 
+// // Supabase S3 Storage config 
 
-var accessKey = builder.Configuration["S3Storage:AccessKey"];
-var accessSecretKey = builder.Configuration["S3Storage:SecretAccessKey"];
-var s3Endpoint = builder.Configuration["S3Storage:Endpoint"];
+// var accessKey = builder.Configuration["S3Storage:AccessKey"];
+// var accessSecretKey = builder.Configuration["S3Storage:SecretAccessKey"];
+// var s3Endpoint = builder.Configuration["S3Storage:Endpoint"];
 
-var s3config = new AmazonS3Config
-{
-    ServiceURL = s3Endpoint,
-    ForcePathStyle = true
-};
+// var s3config = new AmazonS3Config
+// {
+//     ServiceURL = s3Endpoint,
+//     ForcePathStyle = true
+// };
 
-var s3Client = new AmazonS3Client(
-    accessKey,
-    accessSecretKey,
-    s3config
-);
+// var s3Client = new AmazonS3Client(
+//     accessKey,
+//     accessSecretKey,
+//     s3config
+// );
 
-// Add S3 Client to DI Container
-builder.Services.AddSingleton<IAmazonS3>(s3Client);
+// // Add S3 Client to DI Container
+// builder.Services.AddSingleton<IAmazonS3>(s3Client);
 
 
 // Cloudinary Config

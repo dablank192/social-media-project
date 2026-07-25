@@ -4,7 +4,9 @@ using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using vsa_w_controller_csharp.Exception.AuthException;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 namespace vsa_w_controller_csharp.Feature.Image.GetImage;
 
@@ -18,7 +20,7 @@ public record Query(
     GetImageDto Params
 ) : IRequest<Result>;
 public record Result(
-    List<string>? ImageUrl
+    List<ImageMetadata> ImageDetails
 );
 
 public class GetImage(
@@ -30,7 +32,9 @@ public class GetImage(
     [ProducesResponseType<Result>(StatusCodes.Status200OK)]
     public async Task<IActionResult> HandleAsync([FromQuery] GetImageDto qry)
     {
-        var currentUser = User.FindFirst("userid").Value;
+        var currentUser = User.FindFirst("userid")?.Value;
+        if(currentUser == null) throw new UserIdNotFoundException();
+        
         Guid.TryParse(currentUser, out Guid currentUserId);
         
         var result = await sender.Send(new Query(
@@ -43,29 +47,22 @@ public class GetImage(
 }
 
 public class Handler(
-    AppDbContext dbContext,
-    IConfiguration config
+    AppDbContext dbContext
 ) : IRequestHandler<Query, Result>
 
 {
     public async Task<Result> Handle(Query req, CancellationToken ct)
     {
-        var imageUrl = new List<string>();
-        var s3Endpoint = config.GetSection("S3Storage")["Endpoint"];
-
-        var imageKey = await dbContext.BlogImages
+        var imgDetails = await dbContext.BlogImages
         .Where(t => t.BlogId == req.Params.BlogId)
         .OrderBy(t => t.DisplayOrder)
-        .Select(t => t.StorageKey)
+        .Select(t => new ImageMetadata(
+            SecureUrl: t.ImageUrl,
+            PublicId: t.PublicId 
+        ))
         .ToListAsync(ct);
 
-        foreach(var key in imageKey)
-        {
-            var url = $"{s3Endpoint}/{key}";
-            imageUrl.Add(url);
-        }
-
-        return new Result(imageUrl);
+        return new Result(ImageDetails: imgDetails);
 
         //API này dùng để lấy toàn bộ ảnh mà user đã từng đăng, nhưng chưa hoàn thiện do hiện tại project chưa cần dùng tới
     }

@@ -1,13 +1,14 @@
 using System;
-using System.Data.Common;
 using System.Net;
 using Amazon.S3;
+using CloudinaryDotNet;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using vsa_w_controller_csharp.Exception.BlogException;
 using vsa_w_controller_csharp.Exception.ImageException;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
+using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 namespace vsa_w_controller_csharp.Feature.Blog.CreateBlog;
 
@@ -16,7 +17,7 @@ public record Command(
     string Title,
     string? Description,
     string Content,
-    List<string>? StorageKey
+    List<ImageMetadata>? ImageDetails
 ) : IRequest<Result>;
 public record Result(
     Guid BlogId
@@ -39,7 +40,7 @@ public class UserCreateBlog(
             Title: req.Title,
             Description: req.Description,
             Content: req.Content,
-            StorageKey: req.StorageKey
+            ImageDetails: req.ImageDetails
         ));
 
         return Ok(result);
@@ -48,42 +49,13 @@ public class UserCreateBlog(
 
 
 public class Handler(
-    AppDbContext dbContext,
-    IAmazonS3 s3Client
+    AppDbContext dbContext
 ) : IRequestHandler<Command, Result>
 
 {
     public async Task<Result> Handle(Command req, CancellationToken ct)
     {
-        var hasImage = req.StorageKey != null && req.StorageKey.Any();
-
-        if(hasImage)
-        {
-            var validateTask = req.StorageKey.Select(async key =>
-            {
-                try
-                {
-                    var request = new Amazon.S3.Model.GetObjectMetadataRequest
-                    {
-                        BucketName = "products",
-                        Key = key
-                    };
-
-                    await s3Client.GetObjectMetadataAsync(request, ct);
-                    return true;
-                }
-                catch (Amazon.S3.AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return false;
-                }
-            });
-
-            var validation = await Task.WhenAll(validateTask);
-
-            if(validation.Any(t => t == false)) throw new UploadImageException();
-
-        }
-        
+        var hasImage = req.ImageDetails != null && req.ImageDetails.Any();
 
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
@@ -104,12 +76,13 @@ public class Handler(
 
             if(hasImage)
             {
-                for(int i = 0; i < req.StorageKey.Count(); i++)
+                for(int i = 0; i < req.ImageDetails.Count(); i++)
                 {
                     var newImage = new BlogImages
                     {
                         BlogId = newBlog.Id,
-                        StorageKey = req.StorageKey[i],
+                        ImageUrl = req.ImageDetails[i].SecureUrl,
+                        PublicId = req.ImageDetails[i].PublicId,
                         DisplayOrder = i + 1
                     };
 
@@ -123,10 +96,10 @@ public class Handler(
             return new Result(BlogId: newBlog.Id);
         }
 
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
             await transaction.RollbackAsync(ct);
-            throw new CreatedPostException();
+            throw new CreatedPostException(ex.ToString());
         }
     }
 
