@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using Amazon.S3;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.EntityFrameworkCore;
@@ -120,6 +121,24 @@ var s3Client = new AmazonS3Client(
 // Add S3 Client to DI Container
 builder.Services.AddSingleton<IAmazonS3>(s3Client);
 
+
+// Cloudinary Config
+var cldApiKey = builder.Configuration["Cloudinary:APIKey"];
+var cldApiSecret = builder.Configuration["Cloudinary:APISecret"];
+var cldName = builder.Configuration["Cloudinary:CloudName"];
+
+var cloudinaryConfig = new Account
+{
+    ApiKey = cldApiKey,
+    ApiSecret = cldApiSecret,
+    Cloud = cldName
+};
+// Cloudinary Client
+var cloudinaryClient = new Cloudinary(cloudinaryConfig);
+cloudinaryClient.Api.Secure = true;
+
+// Add Cloudinary to DI Container
+builder.Services.AddSingleton(cloudinaryClient);
 
 
 var app = builder.Build();
