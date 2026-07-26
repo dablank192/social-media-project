@@ -61,6 +61,7 @@ public class CldImageManagement(
             throw new UploadImageException(ex.ToString());
         }
 
+        //chua test
     }
 
     public async Task DeleteImageCldAsync(string publicId)
@@ -80,5 +81,6 @@ public class CldImageManagement(
             throw new DeleteImageException(ex.ToString());
         }
         
+        //chua test
     }
 }
