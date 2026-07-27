@@ -15,6 +15,7 @@ public class AppDbContext : DbContext
     public DbSet<BlogLikes> BlogLikes {get; set;}
     public DbSet<Comment> Comment {get; set;}
     public DbSet<UserProfile> UserProfile {get; set;}
+    public DbSet<UserFollow> UserFollow {get; set;}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

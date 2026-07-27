@@ -24,8 +24,12 @@ public class UserProfile
     public string? Bio {get; set;}
     public string? PhoneNumber {get; set;}
     public string? ContactEmail {get; set;}
+    public int FollowerCount {get; set;}
+    public int FolloweeCount {get; set;}
     public ProfileStatus IsPublic {get; set;} = ProfileStatus.Public;
     public string? PortfolioWebsiteUrl {get; set;} //linkedln, github, anything,...
 
     public User User {get; set;}
+    public List<UserFollow> Followers {get; set;} //1 user co the co nhieu nguoi theo doi
+    public List<UserFollow> Following {get; set;} //1 user co the dang theo doi nhieu nguoi
 }
