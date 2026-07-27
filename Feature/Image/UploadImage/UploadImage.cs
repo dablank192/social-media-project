@@ -19,7 +19,7 @@ public class UploadImage(
 
 {
     [HttpPost("upload")]
-    public async Task<IActionResult> HandleAsync([FromBody] Command req)
+    public async Task<IActionResult> HandleAsync([FromForm] Command req)
     {
         var result = await sender.Send(req);
         
@@ -57,6 +57,5 @@ public class Handler(
 
         return new Result(ImageDetail);
 
-        //chưa test
     }
 }

@@ -1,7 +1,7 @@
 @vsa_w_controller_csharp_HostAddress = http://localhost:5169
 @proxy = http://127.0.0.1:5000
 @docker_host = http://localhost:8080
-@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTlmODlmZS0wNjcxLTdjMTAtOWFkOC0xZTkwMzA2ODgwZjAiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjM0IiwiZXhwIjoxNzg0NzMzNzU5fQ.SfkRF-Jrq_IrgBT7JAdOgJIFHlcIpUNA5VMMNC4_8OI
+@access_token = x-access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIwMTlmODlmZS0wNjcxLTdjMTAtOWFkOC0xZTkwMzA2ODgwZjAiLCJ1c2VybmFtZSI6ImV4YW1wbGUxMjM0IiwiZXhwIjoxNzg1MTYzNTI3fQ.FWnfuROquUHTRUCIfhh2RahK2cT1FXhht2ubzp1Us_c
 @refresh_token = x-refresh-token=rqcuODdxIqS%2BQ264AZHW%2Fx3mCAF5aI50qdHM14S6ZbfQvR5e1hIoQwrhh6KAhsF8FeQnzVAygLE%2F12IuBkfbGg%3D%3D
 @presigned_url = https://amcyjsdejcdianlhhwkt.storage.supabase.co/storage/v1/s3/products/path/2026/06/996a711d-b24e-44e7-b4f1-95dba90bb255.png?X-Amz-Expires=300&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dfb7ccf08a59fe4135f9ada22023ebac%2F20260627%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260627T202511Z&X-Amz-SignedHeaders=host&X-Amz-Signature=ed5a0d35877e4a1c7af0ac4bb75244966c92168468cc6dab5db5ae67fdde66c3
 
@@ -202,4 +202,16 @@ Content-Type: application/json
 
 {
     "status": "Private"
+}
+
+
+### Set Avatar
+PATCH {{vsa_w_controller_csharp_HostAddress}}/api/v1/vsac/user/set-avatar
+Cookie: {{access_token}}
+Content-Type: application/json
+
+{
+    "userid":"019f89fe-0671-7c10-9ad8-1e90306880f0",
+    "avatarurl":"https://res.cloudinary.com/dpa72pkie/image/upload/v1785157611/Image/Avatar/fwbtt1xehzqdzriqm8ze.jpg",
+    "publicid": "Image/Avatar/fwbtt1xehzqdzriqm8ze"
 }

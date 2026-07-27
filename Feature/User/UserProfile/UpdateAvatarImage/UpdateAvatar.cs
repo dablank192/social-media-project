@@ -26,7 +26,7 @@ public class UpdateAvatar(
 ) : UserProfileApi
 
 {
-    [HttpPatch("set-avatar")]
+    [HttpPost("set-avatar")]
     public async Task<IActionResult> HandleAsync([FromBody] SubCommand req)
     {
         var currentUser = User.FindFirst("userid")?.Value;
