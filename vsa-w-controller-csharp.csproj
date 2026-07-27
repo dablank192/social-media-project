@@ -46,7 +46,6 @@
     <Folder Include="Feature\Comment\GetComment\" />
     <Folder Include="Feature\Comment\GetReply\" />
     <Folder Include="Feature\Comment\UpdateComment\" />
-    <Folder Include="Feature\Follow\" />
     <Folder Include="Feature\Image\GetImage\" />
     <Folder Include="Feature\Likes\" />
     <Folder Include="Feature\Likes\LikeBlog\" />
