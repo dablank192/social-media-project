@@ -23,7 +23,7 @@ public class FollowUser(
 ) : FollowApi
 
 {
-    [HttpPost("follow/{followeeId}")]
+    [HttpPost("{followeeId}")]
     public async Task<IActionResult> HandleAsync([FromRoute] Guid followeeId)
     {
         var currentUser = User.FindFirst("userid")?.Value;
@@ -56,11 +56,25 @@ public class Handler(
 
             dbContext.UserFollow.Add(newFollow);
 
-            await dbContext.UserFollow
-            .Where(t => t.FolloweeId == req.FolloweeId)
-            .ExecuteUpdateAsync(s => s.SetProperty(u => u.FollowerCount == t.FollowerCount += 1), ct);
+            await dbContext.UserProfile
+            .Where(t => t.UserId == req.FolloweeId)
+            .ExecuteUpdateAsync(s => s.SetProperty(u => u.FollowerCount, u => u.FollowerCount + 1), ct);
+
+            await dbContext.UserProfile
+            .Where(t => t.UserId == req.FollowerId)
+            .ExecuteUpdateAsync(s => s.SetProperty(u => u.FolloweeCount, u => u.FolloweeCount + 1), ct);
+
+            await dbContext.SaveChangesAsync(ct);
+
+            await transaction.CommitAsync(ct);
+
+            return new Result(Message: "User followed successfully");
+        }
+        catch (System.Exception)
+        {
+            await transaction.RollbackAsync(ct);
+            throw;
         }
 
-        //mai code not tinh nang nay
     }
 }
