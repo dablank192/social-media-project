@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using vsa_w_controller_csharp.Exception.AuthException;
+using vsa_w_controller_csharp.Exception.FollowException;
 using vsa_w_controller_csharp.Feature.Follow;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
@@ -73,7 +74,7 @@ public class Handler(
         catch (System.Exception)
         {
             await transaction.RollbackAsync(ct);
-            throw;
+            throw new FollowingUserException(req.FolloweeId);
         }
 
     }

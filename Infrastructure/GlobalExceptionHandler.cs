@@ -5,6 +5,7 @@ using Microsoft.VisualBasic;
 using vsa_w_controller_csharp.Exception.AuthException;
 using vsa_w_controller_csharp.Exception.BlogException;
 using vsa_w_controller_csharp.Exception.Comment;
+using vsa_w_controller_csharp.Exception.FollowException;
 using vsa_w_controller_csharp.Exception.ImageException;
 using vsa_w_controller_csharp.Exception.UserException;
 using vsa_w_controller_csharp.Feature.Blog.UpdateAUserBlog;
@@ -91,6 +92,14 @@ public class GlobalExceptionHandler(
             DeleteImageException => (
                 StatusCodes.Status503ServiceUnavailable,
                 "Error occur while trying to delete image files"
+            ),
+            FollowingUserException => (
+                StatusCodes.Status503ServiceUnavailable,
+                "Error occur while try to follow a User"
+            ),
+            UnfollowingUserException => (
+                StatusCodes.Status503ServiceUnavailable,
+                "Error occur while try to unfollow a User"
             ),
 
             _ => (

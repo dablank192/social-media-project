@@ -20,11 +20,11 @@ public class UserFollowConfig : IEntityTypeConfiguration<UserFollow>
         .WithMany(t => t.Following)
         .HasForeignKey(t => t.FollowerId)
         .HasPrincipalKey(t => t.UserId)
-        .OnDelete(DeleteBehavior.Restrict);
+        .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(t => t.Followee)
         .WithMany(t => t.Followers)
         .HasPrincipalKey(t => t.UserId)
-        .OnDelete(DeleteBehavior.Restrict);
+        .OnDelete(DeleteBehavior.Cascade);
     }
 }

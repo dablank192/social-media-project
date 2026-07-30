@@ -28,6 +28,7 @@
     <Folder Include="Exception\AuthException\" />
     <Folder Include="Exception\BlogException\" />
     <Folder Include="Exception\Comment\" />
+    <Folder Include="Exception\FollowException\" />
     <Folder Include="Exception\ImageException\" />
     <Folder Include="Exception\UserException\" />
     <Folder Include="Feature\Auth\" />
@@ -46,6 +47,7 @@
     <Folder Include="Feature\Comment\GetComment\" />
     <Folder Include="Feature\Comment\GetReply\" />
     <Folder Include="Feature\Comment\UpdateComment\" />
+    <Folder Include="Feature\Follow\UnfollowUser\" />
     <Folder Include="Feature\Image\GetImage\" />
     <Folder Include="Feature\Likes\" />
     <Folder Include="Feature\Likes\LikeBlog\" />
