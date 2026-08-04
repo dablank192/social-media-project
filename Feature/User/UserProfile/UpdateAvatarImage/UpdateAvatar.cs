@@ -55,7 +55,7 @@ public class Handler(
         ?? throw new UserProfileNotFoundException();
 
         profile.AvatarUrl = req.AvatarUrl;
-        profile.PublidId = req.PublicId;
+        profile.PublicId = req.PublicId;
 
         await dbContext.SaveChangesAsync(ct);
 

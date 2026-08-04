@@ -65,7 +65,7 @@ public class Handler(
             HeadLine: prf.HeadLine,
             Bio: prf.Bio,
             AvatarUrl: prf.AvatarUrl,
-            PublicId: prf.PublidId,
+            PublicId: prf.PublicId,
             PhoneNumber: prf.PhoneNumber,
             ContactEmail: prf.ContactEmail,
             PortfolioWebsiteUrl: prf.PortfolioWebsiteUrl,
