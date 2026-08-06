@@ -48,6 +48,7 @@
     <Folder Include="Feature\Comment\GetReply\" />
     <Folder Include="Feature\Comment\UpdateComment\" />
     <Folder Include="Feature\Follow\CountFollow\" />
+    <Folder Include="Feature\Follow\GetFollowee\" />
     <Folder Include="Feature\Follow\GetFollower\" />
     <Folder Include="Feature\Follow\UnfollowUser\" />
     <Folder Include="Feature\Image\GetImage\" />
