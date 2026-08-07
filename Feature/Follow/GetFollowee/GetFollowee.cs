@@ -10,8 +10,8 @@ namespace vsa_w_controller_csharp.Feature.Follow.GetFollowee;
 
 public record Query(
     Guid? UserId,
-    int PageIndex,
-    int PageSize
+    int PageIndex = 1,
+    int PageSize = 1000
 ) : IRequest<Result>;
 
 public record Result(

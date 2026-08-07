@@ -40,6 +40,7 @@
     <Folder Include="Feature\Blog\GetAllUserBlog\" />
     <Folder Include="Feature\Blog\GetLatestBlog\" />
     <Folder Include="Feature\Blog\GetSglUserBlog\" />
+    <Folder Include="Feature\Blog\GetNewFeed\" />
     <Folder Include="Feature\Blog\UpdateAUserBlog\" />
     <Folder Include="Feature\Comment\" />
     <Folder Include="Feature\Comment\CreateComment\" />
