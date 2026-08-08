@@ -63,6 +63,7 @@ public class Handler(
         .Skip(pageIndex)
         .Take(req.PageSize)
         .Select(t => new BlogSummaryDto(
+            Id: t.Id,
             Title: t.Title,
             ImageDetails: t.BlogImages
             .OrderBy(t => t.DisplayOrder)

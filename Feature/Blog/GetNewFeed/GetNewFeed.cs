@@ -5,25 +5,25 @@ using Microsoft.EntityFrameworkCore;
 using vsa_w_controller_csharp.Feature.Blog.GetLatestBlog;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
+using vsa_w_controller_csharp.Share.CursorPagination;
 
 namespace vsa_w_controller_csharp.Feature.Blog.GetNewFeed;
 
 public record Query(
     Guid UserId,
-    int PageIndex = 1,
-    int PageSize = 1000
+    string Cursor,
+    int Limit = 20
 ) : IRequest<Result>;
 
 public record SubQuery(
-    int PageIndex = 1,
-    int PageSize = 1000
+    int Limit,
+    string Cursor
 );
 
 public record Result(
     List<BlogSummaryDto> Items,
-    int PageIndex,
-    int PageSize,
-    int TotalRecord
+    int Limit,
+    string NextCursor
 );
 
 public class GetNewFeed(
@@ -38,8 +38,8 @@ public class GetNewFeed(
 
         var result = await sender.Send(new Query(
             UserId: currentUserId,
-            PageIndex: req.PageIndex,
-            PageSize: req.PageSize
+            Limit: req.Limit,
+            Cursor: req.Cursor
         ));
 
         return Ok(result);
@@ -52,20 +52,25 @@ public class Handler(
 {
     public async Task<Result> Handle(Query req, CancellationToken ct)
     {
-        int index = (req.PageIndex - 1) * req.PageSize;
-        var totalRecord = await dbContext.Blog
+        var query = dbContext.Blog
         .Where(t => t.UserId == req.UserId
-        || dbContext.UserFollow.Any(u => u.FollowerId == req.UserId && u.FolloweeId == t.UserId))
-        .CountAsync(ct);
+        || dbContext.UserFollow.Any(u => u.FollowerId == req.UserId && u.FolloweeId == t.UserId));
 
-        var newFeed = await dbContext.Blog
-        .Where(t => t.UserId == req.UserId
-        || dbContext.UserFollow.Any(u => u.FollowerId == req.UserId && u.FolloweeId == t.UserId))
+        if (req.Cursor != null)
+        {
+            var getCursor = CursorHelper.Decode<NewFeedCursorDto>(req.Cursor);
+            var blogTime = new DateTime(getCursor.Time);
+            
+            query = query.Where(t => t.CreatedAt < blogTime && t.Id == getCursor.BlogId);
+        }
+
+
+        var newFeed = await query
         .AsNoTracking()
-        .Skip(index)
-        .Take(req.PageSize)
+        .Take(req.Limit)
         .OrderByDescending(t => t.CreatedAt)
         .Select(t => new BlogSummaryDto(
+            Id: t.Id,
             Title: t.Title,
             ImageDetails: t.BlogImages
             .OrderBy(t => t.DisplayOrder)
@@ -76,11 +81,24 @@ public class Handler(
         ))
         .ToListAsync(ct);
 
+        string nextCursor = null;
+
+        if(newFeed.Count > 0)
+        {
+            var lastBlog = newFeed.Last();
+
+            var cursorData = new NewFeedCursorDto(
+                Time: lastBlog.CreatedAt.Value.Ticks,
+                BlogId: lastBlog.Id
+            );
+
+            nextCursor = CursorHelper.EncodeCursor(cursorData);
+        }
+
         var response = new Result(
             Items: newFeed,
-            PageIndex: req.PageIndex,
-            PageSize: req.PageSize,
-            TotalRecord: totalRecord
+            Limit: req.Limit,
+            NextCursor: nextCursor
         );
 
         return response;
