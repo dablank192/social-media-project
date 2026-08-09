@@ -28,6 +28,7 @@
     <Folder Include="Exception\AuthException\" />
     <Folder Include="Exception\BlogException\" />
     <Folder Include="Exception\Comment\" />
+    <Folder Include="Exception\CursorException\" />
     <Folder Include="Exception\FollowException\" />
     <Folder Include="Exception\ImageException\" />
     <Folder Include="Exception\UserException\" />

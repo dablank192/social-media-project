@@ -2,8 +2,10 @@ using System;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using vsa_w_controller_csharp.Exception.CursorException;
 using vsa_w_controller_csharp.Feature.Blog.GetLatestBlog;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Model;
 using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 using vsa_w_controller_csharp.Share.CursorPagination;
 
@@ -11,7 +13,7 @@ namespace vsa_w_controller_csharp.Feature.Blog.GetNewFeed;
 
 public record Query(
     Guid UserId,
-    string Cursor,
+    string? Cursor,
     int Limit = 20
 ) : IRequest<Result>;
 
@@ -53,22 +55,27 @@ public class Handler(
     public async Task<Result> Handle(Query req, CancellationToken ct)
     {
         var query = dbContext.Blog
-        .Where(t => t.UserId == req.UserId
-        || dbContext.UserFollow.Any(u => u.FollowerId == req.UserId && u.FolloweeId == t.UserId));
+        .Where(t => t.Status == BlogStatus.Active &&
+        (t.UserId == req.UserId
+        || dbContext.UserFollow.Any(u => u.FollowerId == req.UserId && u.FolloweeId == t.UserId))
+        );
 
         if (req.Cursor != null)
         {
             var getCursor = CursorHelper.Decode<NewFeedCursorDto>(req.Cursor);
+            if(getCursor == null) throw new InvalidCursorException();
+
             var blogTime = new DateTime(getCursor.Time);
             
-            query = query.Where(t => t.CreatedAt < blogTime && t.Id == getCursor.BlogId);
+            query = query.Where(t => t.CreatedAt < blogTime || (t.CreatedAt == blogTime && t.Id < getCursor.BlogId));
         }
 
 
         var newFeed = await query
         .AsNoTracking()
-        .Take(req.Limit)
         .OrderByDescending(t => t.CreatedAt)
+        .ThenByDescending(t => t.Id)
+        .Take(req.Limit)
         .Select(t => new BlogSummaryDto(
             Id: t.Id,
             Title: t.Title,
