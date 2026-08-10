@@ -106,6 +106,10 @@ public class GlobalExceptionHandler(
                 StatusCodes.Status406NotAcceptable,
                 "Invalid cursor key"
             ),
+            BlogNotFoundException => (
+                StatusCodes.Status404NotFound,
+                "Blog's Id not found"
+            ),
 
             _ => (
                 StatusCodes.Status500InternalServerError,

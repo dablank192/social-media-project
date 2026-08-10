@@ -4,13 +4,14 @@ using Amazon.Runtime.Internal;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using vsa_w_controller_csharp.Exception.BlogException;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
 
 namespace vsa_w_controller_csharp.Feature.Likes.LikeBlog;
 
 public record LikeDto(
-    [property: Required(ErrorMessage = "Missing Blog Id")]
+    // [property: Required(ErrorMessage = "Missing Blog Id")]
     Guid BlogId);
 public record Command(
     Guid BlogId,
@@ -27,7 +28,7 @@ public class LikeBlog(
 {
     [HttpPost("")]
     public async Task<IActionResult> HandleAsync([FromBody] LikeDto req)
-    {
+    {   
         var currentUser = User.FindFirst("userid")!.Value;
         Guid.TryParse(currentUser, out Guid userId);
 
@@ -47,6 +48,12 @@ public class Handler(
 {
     public async Task<Result> Handle(Command req, CancellationToken ct)
     {
+        var validBlog = await dbContext.Blog.FirstOrDefaultAsync(
+            t => t.Id == req.BlogId
+            && t.Status == BlogStatus.Active,
+            ct
+        ) ?? throw new BlogNotFoundException();        
+        
         var existingLike = await dbContext.BlogLikes.FirstOrDefaultAsync(
             t => t.UserId == req.UserId
             && t.BlogId == req.BlogId
@@ -64,7 +71,7 @@ public class Handler(
         }
         else
         {
-            dbContext.BlogLikes.Remove(existingLike);
+            return new Result(Message: "User already liked this post");
         }
 
         await dbContext.SaveChangesAsync(ct);
