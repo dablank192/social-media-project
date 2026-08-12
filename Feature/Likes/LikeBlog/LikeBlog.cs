@@ -71,11 +71,15 @@ public class Handler(
         }
         else
         {
-            return new Result(Message: "User already liked this post");
+            return new Result(
+                Message: "User already liked this post"
+                );
         }
 
         await dbContext.SaveChangesAsync(ct);
 
-        return new Result(Message: $"Like added to Blog Id");
+        return new Result(
+            Message: $"Like added to Blog Id"
+            );
     }
 }

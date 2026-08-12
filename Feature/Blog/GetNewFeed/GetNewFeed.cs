@@ -84,7 +84,9 @@ public class Handler(
             .Select(t => new ImageMetadata(SecureUrl: t.ImageUrl, PublicId: t.PublicId))
             .ToList(),
             Description: t.Description,
-            CreatedAt: t.CreatedAt
+            CreatedAt: t.CreatedAt,
+            LikeCount: t.BlogLikes.Count,
+            IsLikedByUser: t.BlogLikes.Any(u => u.UserId == req.UserId)
         ))
         .ToListAsync(ct);
 

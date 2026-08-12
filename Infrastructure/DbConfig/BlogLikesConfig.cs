@@ -21,6 +21,8 @@ public class BlogLikesConfig : IEntityTypeConfiguration<BlogLikes>
         .HasForeignKey(t => t.BlogId)
         .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasIndex(t => t.BlogId);
+
         builder.HasOne(t => t.User)
         .WithMany(t => t.BlogLikes)
         .HasForeignKey(t => t.UserId)

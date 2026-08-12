@@ -3,17 +3,26 @@ using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using vsa_w_controller_csharp.Exception.AuthException;
 using vsa_w_controller_csharp.Feature.Blog.GetAllUserBlog;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 namespace vsa_w_controller_csharp.Feature.Blog.GetLatestBlog;
 
-public record Command(
+public record SubCommand(
     DateOnly FromDate,
     DateOnly ToDate,
     int PageIndex,
     int PageSize
+);
+
+public record Command(
+    DateOnly FromDate,
+    DateOnly ToDate,
+    int PageIndex,
+    int PageSize,
+    Guid UserId
 ) : IRequest<Result>;
 
 public record Result(
@@ -30,9 +39,20 @@ public class GetLatestBlog(
 {
     [HttpGet("feed")]
     [ProducesResponseType<Result>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> Handle([FromQuery] Command req)
+    public async Task<IActionResult> Handle([FromQuery] SubCommand req)
     {
-        var result = await sender.Send(req);
+        var currentUser = User.FindFirst("userid")?.Value
+        ?? throw new UserIdNotFoundException();
+        
+        Guid.TryParse(currentUser, out Guid currentUserId);
+
+        var result = await sender.Send(new Command(
+            FromDate: req.FromDate,
+            ToDate: req.ToDate,
+            PageIndex: req.PageIndex,
+            PageSize: req.PageSize,
+            UserId: currentUserId
+        ));
 
         return Ok(result);
     }
@@ -70,7 +90,9 @@ public class Handler(
             .Select(t => new ImageMetadata(SecureUrl: t.ImageUrl, PublicId: t.PublicId))
             .ToList(),
             Description: t.Description,
-            CreatedAt: t.CreatedAt
+            CreatedAt: t.CreatedAt,
+            LikeCount: t.BlogLikes.Count,
+            IsLikedByUser: t.BlogLikes.Any(u => u.UserId == req.UserId)
         ))
         .ToListAsync(ct);
 

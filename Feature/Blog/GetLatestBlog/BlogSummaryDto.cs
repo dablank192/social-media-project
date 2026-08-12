@@ -8,5 +8,7 @@ public record BlogSummaryDto(
     string? Title,
     List<ImageMetadata>? ImageDetails,
     string? Description,
-    DateTime? CreatedAt
+    DateTime? CreatedAt,
+    int LikeCount,
+    bool IsLikedByUser
 );

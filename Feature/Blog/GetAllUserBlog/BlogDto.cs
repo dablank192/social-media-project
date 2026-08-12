@@ -11,5 +11,7 @@ public record BlogDto(
     string? Description,
     string? Content,
     string Status,
+    int LikeCount,
+    bool IsLikedByUser,
     DateTime? CreatedAt
 );

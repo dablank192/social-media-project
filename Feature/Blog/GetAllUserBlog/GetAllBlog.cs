@@ -70,6 +70,8 @@ public class Handler(
             Description: t.Description,
             Content: t.Content,
             Status: t.Status,
+            LikeCount: t.BlogLikes.Count,
+            IsLikedByUser: t.BlogLikes.Any(u => u.UserId == qry.UserId),
             CreatedAt: t.CreatedAt
         ))
         .ToListAsync(ct);
