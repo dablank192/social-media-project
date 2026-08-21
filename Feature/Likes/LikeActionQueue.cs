@@ -10,20 +10,34 @@ public class LikeActionQueue
     public LikeActionQueue()
     {
         _channel = Channel.CreateBounded<LikeActionItem>(
-            new BoundedChannelOptions(1000)
+            new BoundedChannelOptions(1000) //tạo queue object với cấu hình capacity là 1000
             {
                 SingleReader = true,
                 SingleWriter = false,
-                FullMode = BoundedChannelFullMode.Wait,
+                FullMode = BoundedChannelFullMode.Wait, //config này dùng với case mà có lượng task nhiều hơn capacity,
+                //nó sẽ yêu cầu các task đợi cho queue có slot thì mới add vào
+
                 AllowSynchronousContinuations = false
             }
         );
     }
     
-    public async Task<LikeActionResult> EnqueueAsync(LikeActionItem item, CancellationToken ct)
+    public async Task<LikeActionResult> EnqueueAsync(
+        Guid userId,
+        Guid blogId,
+        ActionType action,
+        CancellationToken ct)
+
     {
         var completion = new TaskCompletionSource<LikeActionResult>(
             TaskCreationOptions.RunContinuationsAsynchronously
+        );
+
+        var item = new LikeActionItem(
+            UserId: userId,
+            BlogId: blogId,
+            Action: action,
+            Completion: completion
         );
 
         await _channel.Writer.WriteAsync(item, ct);
