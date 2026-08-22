@@ -2,8 +2,10 @@ using System;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using vsa_w_controller_csharp.Exception.AuthException;
 using vsa_w_controller_csharp.Exception.Comment;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Model;
 
 namespace vsa_w_controller_csharp.Feature.Comment.UpdateComment;
 
@@ -29,6 +31,8 @@ public class UpdateComment(
     public async Task<IActionResult> HandleAsync([FromBody] SubCommand req)
     {
         var currentUser = User.FindFirst("userid")?.Value;
+        if(currentUser == null) throw new UserIdNotFoundException();
+
         Guid.TryParse(currentUser, out Guid currentUserId);
 
         var result = await sender.Send(new Command(UserId: currentUserId, Params: req));
@@ -46,7 +50,9 @@ public class Handler(
     {
         var comment = await dbContext.Comment.FirstOrDefaultAsync(
             t => t.Id == req.Params.CommentId
-            && t.UserId == req.UserId, ct)
+            && t.UserId == req.UserId
+            && t.IsDelete == CommentStatus.Active
+            , ct)
         ?? throw new CommentNotFoundException(req.Params.CommentId);
 
         comment.Content = req.Params.Content ?? comment.Content;

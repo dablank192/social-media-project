@@ -47,6 +47,8 @@ public class Handler(
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
+        if(req.FollowerId == req.FolloweeId) throw new FollowingUserException(req.FollowerId);
+        
         try
         {
             var newFollow = new UserFollow

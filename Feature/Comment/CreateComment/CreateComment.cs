@@ -2,8 +2,11 @@ using System;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using vsa_w_controller_csharp.Exception.BlogException;
 using vsa_w_controller_csharp.Exception.Comment;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Model;
 
 namespace vsa_w_controller_csharp.Feature.Comment.CreateComment;
 
@@ -54,6 +57,12 @@ public class Handler(
     {
         var parentCommentId = req.ParentCommentId;
 
+        var validBlog = await dbContext.Blog.FirstOrDefaultAsync(
+            t => t.Id == req.BlogId
+            && t.Status == BlogStatus.Active
+            )
+        ?? throw new BlogNotFoundException();
+        
         if(parentCommentId != null)
         {
             var target = await dbContext.Comment.FindAsync(parentCommentId, ct)
