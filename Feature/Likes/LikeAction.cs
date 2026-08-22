@@ -18,5 +18,6 @@ public record LikeActionItem(
 public record LikeActionResult(
     Guid BlogId,
     bool IsLike,
-    int LikeCount
+    int LikeCount,
+    string Message
 );

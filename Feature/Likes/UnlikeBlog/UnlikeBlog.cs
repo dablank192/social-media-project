@@ -13,25 +13,27 @@ namespace vsa_w_controller_csharp.Feature.Likes.UnlikeBlog;
 public record Command (
     Guid BlogId,
     Guid UserId
-) : IRequest<Result>;
+) : IRequest<LikeActionResult>;
 
-public record Result(
-    string Message
-);
 
 public class UnlikeBlog(
-    ISender sender
+    LikeActionQueue queue
 ) : LikeApi
 
 {
     [HttpDelete("unlike")]
-    public async Task<IActionResult> HandleAsync([FromBody] LikeDto req)
-    {
+    public async Task<IActionResult> HandleAsync([FromBody] LikeDto req ,CancellationToken ct)
+    { 
         var currentUser = User.FindFirst("userid")?.Value
         ?? throw new UserIdNotFoundException();
         Guid.TryParse(currentUser, out Guid currentUserId);
         
-        var result = await sender.Send(new Command(BlogId: req.BlogId, UserId: currentUserId));
+        var result = await queue.EnqueueAsync(
+            userId: currentUserId,
+            blogId: req.BlogId,
+            action: ActionType.Unlike,
+            ct: ct
+        );
 
         return Ok(result);
     }
@@ -39,10 +41,10 @@ public class UnlikeBlog(
 
 public class Handler(
     AppDbContext dbContext
-) : IRequestHandler<Command, Result>
+) : IRequestHandler<Command, LikeActionResult>
 
 {
-    public async Task<Result> Handle(Command req, CancellationToken ct)
+    public async Task<LikeActionResult> Handle(Command req, CancellationToken ct)
     {
         var validBlog = await dbContext.Blog.FirstOrDefaultAsync(
             t => t.Id == req.BlogId
@@ -61,13 +63,18 @@ public class Handler(
         {
             dbContext.Remove(existingLike);
         }
-        else
-        {
-            return new Result(Message: "Blog has not been liked yet");
-        }
+        else throw new BlogNotFoundException();
+
 
         await dbContext.SaveChangesAsync(ct);
 
-        return new Result(Message: "Blog has been unliked");
+        var likeCount = await dbContext.BlogLikes.CountAsync(t => t.BlogId == req.BlogId, ct);
+
+        return new LikeActionResult(
+            BlogId: req.BlogId,
+            IsLike: false,
+            LikeCount: likeCount,
+            Message: "Blog unliked successfully"
+        );
     }
 }

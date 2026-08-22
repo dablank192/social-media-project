@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using vsa_w_controller_csharp.Feature.Auth;
+using vsa_w_controller_csharp.Feature.Likes;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
@@ -140,6 +141,11 @@ cloudinaryClient.Api.Secure = true;
 
 // Add Cloudinary to DI Container
 builder.Services.AddSingleton(cloudinaryClient);
+
+
+// Add Like queue and worker
+builder.Services.AddSingleton<LikeActionQueue>();
+builder.Services.AddHostedService<LikeActionWorker>();
 
 
 var app = builder.Build();

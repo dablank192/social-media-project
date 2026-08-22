@@ -4,6 +4,7 @@ using Amazon.Runtime.Internal;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using vsa_w_controller_csharp.Exception.AuthException;
 using vsa_w_controller_csharp.Exception.BlogException;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
@@ -16,26 +17,29 @@ public record LikeDto(
 public record Command(
     Guid BlogId,
     Guid UserId
-) : IRequest<Result>;
-public record Result(
-    string Message
-);
+) : IRequest<LikeActionResult>;
+
 
 public class LikeBlog(
-    ISender sender
+    LikeActionQueue queue
 ) : LikeApi
 
 {
     [HttpPost("")]
-    public async Task<IActionResult> HandleAsync([FromBody] LikeDto req)
+    public async Task<IActionResult> HandleAsync([FromBody] LikeDto req, CancellationToken ct)
     {   
+
         var currentUser = User.FindFirst("userid")!.Value;
         Guid.TryParse(currentUser, out Guid userId);
 
-        var result = await sender.Send(new Command(
-            BlogId: req.BlogId,
-            UserId: userId
-        ));
+        if(currentUser == null) throw new UserIdNotFoundException();
+
+        var result = await queue.EnqueueAsync(
+            userId: userId,
+            blogId: req.BlogId,
+            action: ActionType.Like,
+            ct: ct
+        );
 
         return Ok(result);
     }
@@ -43,10 +47,10 @@ public class LikeBlog(
 
 public class Handler(
     AppDbContext dbContext
-) : IRequestHandler<Command, Result>
+) : IRequestHandler<Command, LikeActionResult>
 
 {
-    public async Task<Result> Handle(Command req, CancellationToken ct)
+    public async Task<LikeActionResult> Handle(Command req, CancellationToken ct)
     {
         var validBlog = await dbContext.Blog.FirstOrDefaultAsync(
             t => t.Id == req.BlogId
@@ -68,18 +72,16 @@ public class Handler(
             };
 
             dbContext.BlogLikes.Add(newLike);
+            await dbContext.SaveChangesAsync(ct);
         }
-        else
-        {
-            return new Result(
-                Message: "User already liked this post"
-                );
-        }
+        
+        var likeCount = await dbContext.BlogLikes.CountAsync(t => t.BlogId == req.BlogId, ct);
 
-        await dbContext.SaveChangesAsync(ct);
-
-        return new Result(
-            Message: $"Like added to Blog Id"
+        return new LikeActionResult(
+            BlogId: req.BlogId,
+            IsLike: true,
+            LikeCount: likeCount,
+            Message: "Blog liked successfully"
             );
     }
 }
