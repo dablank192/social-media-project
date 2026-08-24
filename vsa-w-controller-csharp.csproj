@@ -34,6 +34,7 @@
     <Folder Include="Exception\UserException\" />
     <Folder Include="Feature\Auth\" />
     <Folder Include="Feature\Auth\Login\" />
+    <Folder Include="Feature\Auth\Logout\" />
     <Folder Include="Feature\Auth\Refresh\" />
     <Folder Include="Feature\Auth\Register\" />
     <Folder Include="Feature\Blog\CreateBlog\" />

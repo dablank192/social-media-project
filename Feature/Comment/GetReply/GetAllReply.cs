@@ -43,7 +43,8 @@ public class Handler(
         var root = dbContext.Comment
         .AsNoTracking()
         .Where(t => t.ParentCommentId == req.CommentId
-        && t.IsDelete == CommentStatus.Active);
+        && t.IsDelete == CommentStatus.Active
+        && t.Blog.Status == BlogStatus.Active);
 
         var totalRecord = await root.CountAsync(ct);
         var index = (req.PageIndex - 1) * req.PageSize;
