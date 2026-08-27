@@ -66,6 +66,7 @@
     <Folder Include="Infrastructure\" />
     <Folder Include="Infrastructure\DbConfig\" />
     <Folder Include="Model\" />
+    <Folder Include="Share\ApiResponse\" />
     <Folder Include="Share\CursorPagination\" />
     <Folder Include="Share\GetFollowDto\" />
   </ItemGroup>
