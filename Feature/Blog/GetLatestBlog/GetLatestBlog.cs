@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using vsa_w_controller_csharp.Exception.AuthException;
 using vsa_w_controller_csharp.Feature.Blog.GetAllUserBlog;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Share.ApiResponse;
 using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 namespace vsa_w_controller_csharp.Feature.Blog.GetLatestBlog;
@@ -54,7 +55,20 @@ public class GetLatestBlog(
             UserId: currentUserId
         ));
 
-        return Ok(result);
+        var pageData = new PageResponse<BlogSummaryDto>(
+            Data: result.Response,
+            PageIndex: result.PageIndex,
+            PageSize: result.PageSize,
+            TotalRecord: result.TotalRecord,
+            TotalPage: null
+        );
+
+        var response = ApiResponse<PageResponse<BlogSummaryDto>>.Success(
+            SuccessMessage: "Success",
+            SuccessResponse: pageData
+        );
+
+        return Ok(response);
     }
 }
 

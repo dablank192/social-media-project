@@ -1,10 +1,12 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using vsa_w_controller_csharp.Exception.BlogException;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Share.ApiResponse;
 
 namespace vsa_w_controller_csharp.Feature.Blog.UpdateAUserBlog;
 
@@ -40,7 +42,13 @@ public class UpdateBlog (
             Content: req.Content
         ));
 
-        return Ok(result);
+        var response = new ApiResponse<Result>(
+            Error: null,
+            Message: "Blog updated successfully",
+            Response: result 
+        );
+
+        return Ok(response);
     }
 }
 

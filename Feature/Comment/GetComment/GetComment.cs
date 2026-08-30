@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
+using vsa_w_controller_csharp.Share.ApiResponse;
 
 namespace vsa_w_controller_csharp.Feature.Comment.GetComment;
 
@@ -31,7 +32,21 @@ public class GetComment(
     {
         var result = await sender.Send(req);
 
-        return Ok(result);
+        var pageData = new PageResponse<GetCommentDto>(
+            Data: result.Response,
+            PageSize: result.PageSize,
+            PageIndex: result.PageSize,
+            TotalRecord: result.TotalRecord,
+            TotalPage: result.TotalPage
+        );
+
+        var response = new ApiResponse<PageResponse<GetCommentDto>>(
+            Error: null,
+            Message: "Success",
+            Response: pageData
+        );
+
+        return Ok(response);
     }
 }
 

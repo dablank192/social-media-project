@@ -1,12 +1,15 @@
 using System;
+using CloudinaryDotNet;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 using vsa_w_controller_csharp.Exception.BlogException;
 using vsa_w_controller_csharp.Exception.Comment;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
+using vsa_w_controller_csharp.Share.ApiResponse;
 
 namespace vsa_w_controller_csharp.Feature.Comment.CreateComment;
 
@@ -44,7 +47,13 @@ public class CreateComment(
             UserId: currentUserId
         ));
 
-        return Ok(result);
+        var response = new ApiResponse<Result>(
+            Error: null,
+            Message: "Comment created successfully",
+            Response: result
+        );
+
+        return Ok(response);
     }
 }
 

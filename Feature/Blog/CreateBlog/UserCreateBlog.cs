@@ -8,6 +8,7 @@ using vsa_w_controller_csharp.Exception.BlogException;
 using vsa_w_controller_csharp.Exception.ImageException;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
+using vsa_w_controller_csharp.Share.ApiResponse;
 using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 namespace vsa_w_controller_csharp.Feature.Blog.CreateBlog;
@@ -43,7 +44,12 @@ public class UserCreateBlog(
             ImageDetails: req.ImageDetails
         ));
 
-        return Ok(result);
+        var response = ApiResponse<Result>.Success(
+            SuccessMessage: "Blog created successfully",
+            SuccessResponse: result
+        );
+
+        return Ok(response);
     }
 }
 

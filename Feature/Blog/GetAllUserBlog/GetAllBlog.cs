@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Share.ApiResponse;
 using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 namespace vsa_w_controller_csharp.Feature.Blog.GetAllUserBlog;
@@ -35,7 +36,20 @@ public class GetAllBlog(
             Params: qry
         ));
 
-        return Ok(result);
+        var pageData = new PageResponse<BlogDto>(
+            Data: result.Response,
+            PageIndex: result.PageIndex,
+            PageSize: result.PageSize,
+            TotalRecord: result.TotalRecord,
+            TotalPage: null
+        );
+
+        var response = ApiResponse<PageResponse<BlogDto>>.Success(
+            SuccessMessage: "Success",
+            SuccessResponse: pageData
+        );
+
+        return Ok(response);
     }
 }
 

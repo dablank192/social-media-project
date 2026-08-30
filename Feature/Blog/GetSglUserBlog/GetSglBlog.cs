@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using vsa_w_controller_csharp.Exception.AuthException;
 using vsa_w_controller_csharp.Feature.Blog.GetAllUserBlog;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Share.ApiResponse;
 using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 
 namespace vsa_w_controller_csharp.Feature.Blog.GetSglUserBlog;
@@ -40,7 +41,13 @@ public class GetSglBlog(
             UserId: currentUserId
         ));
 
-        return Ok(result);
+        var response = new ApiResponse<Result>(
+            Error: null,
+            Message: "Success",
+            Response: result
+        );
+
+        return Ok(response);
     }
 }
 
@@ -51,9 +58,7 @@ public class Handler(
 ) : IRequestHandler<Query, Result>
 {
     public async Task<Result> Handle(Query qry, CancellationToken ct)
-    {
-        var s3Endpoint = config.GetSection("S3Storage")["PublicEndpoint"];
-        
+    {        
         var blog = await dbContext.Blog
         .Where(t => t.Id == qry.BlogId)
         .Select(t => new BlogDto(

@@ -6,6 +6,7 @@ using vsa_w_controller_csharp.Exception.CursorException;
 using vsa_w_controller_csharp.Feature.Blog.GetLatestBlog;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
+using vsa_w_controller_csharp.Share.ApiResponse;
 using vsa_w_controller_csharp.Share.CloudinaryImgUpload;
 using vsa_w_controller_csharp.Share.CursorPagination;
 
@@ -44,7 +45,13 @@ public class GetNewFeed(
             Cursor: req.Cursor
         ));
 
-        return Ok(result);
+        var response = new ApiResponse<Result>(
+            Error: null,
+            Message: "Success",
+            Response: result
+        );
+
+        return Ok(response);
     }
 }
 
