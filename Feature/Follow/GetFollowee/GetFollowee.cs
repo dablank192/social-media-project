@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Share.ApiResponse;
 using vsa_w_controller_csharp.Share.GetFollowDto;
 
 namespace vsa_w_controller_csharp.Feature.Follow.GetFollowee;
@@ -32,7 +33,21 @@ public class GetFollowee(
     {
         var result = await sender.Send(qry);
 
-        return Ok(result);
+        var pageData = new PageResponse<GetFolloweeDto>(
+            Data: result.Items,
+            PageSize: result.PageSize,
+            PageIndex: result.PageIndex,
+            TotalRecord: result.TotalRecord,
+            TotalPage: result.TotalPage
+        );
+
+        var response = new ApiResponse<PageResponse<GetFolloweeDto>>(
+            Error: null,
+            Message: "Success",
+            Response: pageData
+        );
+
+        return Ok(response);
     }
 }
 

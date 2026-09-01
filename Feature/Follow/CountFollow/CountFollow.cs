@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using vsa_w_controller_csharp.Exception.AuthException;
 using vsa_w_controller_csharp.Infrastructure;
+using vsa_w_controller_csharp.Share.ApiResponse;
 
 namespace vsa_w_controller_csharp.Feature.Follow.CountFollow;
 
@@ -23,7 +24,13 @@ public class CountFollow(
     {
         var result = await sender.Send(new Query(userId));
 
-        return Ok(result);
+        var response = new ApiResponse<Result>(
+            Error: null,
+            Message: "Success",
+            Response: result
+        );
+
+        return Ok(response);
     }
 }
 

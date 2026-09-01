@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using vsa_w_controller_csharp.Exception.UserException;
 using vsa_w_controller_csharp.Infrastructure;
 using vsa_w_controller_csharp.Model;
+using vsa_w_controller_csharp.Share.ApiResponse;
 
 namespace vsa_w_controller_csharp.Feature.User.UserProfile.GetUserProfile;
 
@@ -39,7 +40,13 @@ public class GetUserProfile(
     {
         var result = await sender.Send(new Query(UserId: UserId));
 
-        return Ok(result);
+        var response = new ApiResponse<Result>(
+            Error: null,
+            Message: "Success",
+            Response: result
+        );
+
+        return Ok(response);
     }
 }
 
